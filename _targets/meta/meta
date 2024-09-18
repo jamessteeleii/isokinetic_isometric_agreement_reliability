@@ -1,0 +1,19 @@
+name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+data|stem|2ff46fa6d63ad378|bf6275f653d53dd4|b9952bd51cccea52|33550471||t19984.5934224582s|d1ec28f89e6eaddb|3785|rds|local|vector|||0.72||
+file|stem|c20bcd8480d8f847|ee6cebdffc9a61e4|2c530c1562a7fbd1|1735323524|C:/Users/james/Dropbox/Research/Exercise Coach/isokinetic_isometric_agreement_reliability/data/data.csv|t19979.6883428076s|16d04af8c751579f|5748|file|local|vector|||6.05||
+fit_isometric_model|function|ae7ff73444859afe|||||||||||||||
+get_isometric_bias_summary|function|b7d18d4307680e8f|||||||||||||||
+get_isometric_draws|function|6b2c40a58310119c|||||||||||||||
+get_isometric_loamr_summary|function|650fdcb8a2a42816|||||||||||||||
+isokinetic_data|stem|f487116f74b012de|050477b453f1eede|5177e098a0d06a60|-752093902||t19984.5944274559s|84428f56d61b88f9|1626|rds|local|vector|||0.03||
+isometric_bias_plot|stem|1493efb6f34f5ed2|161f9caaa8152f08|868d7d9a39ca50dd|619079591||t19984.6667442908s|67c62c5a6814ea2e|8087487|rds|local|vector|||1.7||
+isometric_bias_summary|stem|682e8e5ba41af2a1|70b10c2c2950f838|c0c6cf8b004b23e1|915718745||t19984.6667141126s|c8c427a644ae7cad|419|rds|local|vector|||1.83||
+isometric_data|stem|ed62e575a095b21f|bebe69adaf0b6da9|5d376f7fef536e68|1348213187||t19984.5944283077s|1931b44881fa2863|3630|rds|local|vector|||0.06||
+isometric_draws|stem|76e0dd14c8d8e060|e75eb339839d57f7|b3a198f62b54f715|-1456788329||t19984.6660591181s|73a1ce8b150b34ee|3306682|rds|local|vector|||0.84||
+isometric_loamr_plot|stem|a6a3c5728614735a|f4b63a9a62d83da7|294bbe969e6276a2|-107861230||t19984.6667179939s|e92dc1cf0fb3adbc|333307|rds|local|vector|||0.2||
+isometric_loamr_summary|stem|28b9e01c98115e67|5d77712d8f594d9f|a1c49bf7791ee223|1199122691||t19984.6666927776s|8d5a8020674ecafb|988|rds|local|vector|||0.14|Detected an unexpected manytomany relationship between x and y.ℹ Row 1 of x matches multiple rows in y.ℹ Row 1 of y matches multiple rows in x.ℹ If a manytomany relationship is expected, set relationship   manytomany to silence this warning.|
+isometric_model|stem|ebab45b1f6f162a4|ec65a99abf8923c4|5695414377ec4144|1609790368||t19984.6660468558s|4b3c9f341a94291e|190006062|rds|local|vector|||316.78|There were 2 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. Seehttpsmcstan.orgmiscwarnings.htmlmaximumtreedepthexceeded. Examine the pairs plot to diagnose sampling problems|
+plot_isometric_bias|function|929f9e94341729db|||||||||||||||
+plot_isometric_loamr|function|9c82c22867595a0d|||||||||||||||
+prepare_isokinetic_data|function|b4358e1486920989|||||||||||||||
+prepare_isometric_data|function|84dd871287950d74|||||||||||||||
