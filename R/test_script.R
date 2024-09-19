@@ -221,14 +221,7 @@ loam_plot <- isometric_data |>
             aes(x=mean_i, y = mean, group=exercise)) +
   geom_line(data = loamr_summary_isometric |> filter(bw_w == "bw"),
             aes(x=mean_i, y = -mean, group=exercise)) +
-  
-  # geom_label(data = isometric_data |> mutate(exercise = case_when(
-  #   exercise == "cp" ~ "Chest Press",
-  #   exercise == "lp" ~ "Leg Press",
-  #   exercise == "row" ~ "Row"
-  # )) |> group_by(participant, exercise) |> slice_max(mean_diff, n=1),
-  #            aes(x = mean_i, y = mean_diff + 10, label = participant)) +
-  
+ 
   geom_text(data = loamr_summary_isometric |> filter(bw_w == "w") |> group_by(exercise) |> 
               mutate(x = (max(mean_i) - min(mean_i))/2) |> slice_min(mean_i, n=1) |> slice_head(n=1),
             aes(x=mean_i + x, y=-75, group=exercise, 
@@ -594,24 +587,64 @@ loam_plot_row <- isometric_data_row |>
 
 
 ### Isokinetic
-isokinetic_data_cp <- isokinetic_data |>
-  select(participant, exercise, day, con_ecc, value) |>
-  filter(exercise == "cp") |>
-  group_by(participant, con_ecc) |>
-  mutate(mean_i = mean(value),
-         mean_diff = value - mean_i)
+# isokinetic_data_cp <- isokinetic_data |>
+#   select(participant, exercise, day, con_ecc, value) |>
+#   # filter(exercise == "cp") |>
+#   group_by(participant, con_ecc) |>
+#   mutate(mean_i = mean(value),
+#          mean_diff = value - mean_i)
 
-# isokinetic_data_cp_wide <- isokinetic_data_cp |>
-#   pivot_wider(names_from = c("day", "con_ecc"),
-#               values_from = "value",
-#               id_cols = c("participant", "exercise")) |>
+isokinetic_data_delta <- isokinetic_data |>
+  pivot_wider(names_from = c("day", "exercise", "con_ecc"),
+              values_from = "value",
+              id_cols = c("participant")) |>
+  mutate(delta_cp_con = d2_cp_con - d1_cp_con,
+         mean_cp_con = (d1_cp_con + d2_cp_con)/1,
+         delta_lp_con = d2_lp_con - d1_lp_con,
+         mean_lp_con = (d1_lp_con + d2_lp_con)/1,
+         delta_row_con = d2_row_con - d1_row_con,
+         mean_row_con = (d1_row_con + d2_row_con)/1,
+         delta_cp_ecc = d2_cp_ecc - d1_cp_ecc,
+         mean_cp_ecc = (d1_cp_ecc + d2_cp_ecc)/1,
+         delta_lp_ecc = d2_lp_ecc - d1_lp_ecc,
+         mean_lp_ecc = (d1_lp_ecc + d2_lp_ecc)/1,
+         delta_row_ecc = d2_row_ecc - d1_row_ecc,
+         mean_row_ecc = (d1_row_ecc + d2_row_ecc)/1) 
+  # mutate(delta_con = d2_con - d1_con,
+  #        delta_ecc = d2_ecc - d1_ecc,
+  #        mean_con = (d1_con + d2_con)/2,
+  #        mean_ecc = (d1_ecc + d2_ecc)/2) |>
+  # mutate(delta_cp = d2_cp - d1_cp,
+  #        delta_lp = d2_lp - d1_lp,
+  #        delta_row = d2_row - d1_row,
+  #        mean_cp = (d1_cp + d2_cp)/2,
+  #        mean_lp = (d1_lp + d2_lp)/2,
+  #        mean_row = (d1_row + d2_row)/2)
+  select(participant, exercise, mean_cp, mean_lp, mean_row, delta_cp, delta_lp, delta_row)
+
+# con_bf <- bf(delta_con ~ 0 + exercise,
+#              sigma ~ 0 + exercise)
+# ecc_bf <- bf(delta_ecc ~ 0 + exercise,
+#              sigma ~ 0 + exercise)
   
 
-con_bf <- bf(con ~ 1 + day + (1|i|participant))
-ecc_bf <- bf(ecc ~ 1 + day + (1|i|participant))
+cp_con_bf <- bf(delta_cp_con ~ 1)
 
-brm_model_isokinetic_cp <- brm(con_bf + ecc_bf,
-                              data = isokinetic_data_cp_wide,
+lp_con_bf <- bf(delta_lp_con ~ 1)
+
+row_con_bf <- bf(delta_row_con ~ 1)
+
+cp_ecc_bf <- bf(delta_cp_ecc ~ 1)
+
+lp_ecc_bf <- bf(delta_lp_ecc ~ 1)
+
+row_ecc_bf <- bf(delta_row_ecc ~ 1)
+
+
+brm_model_isokinetic <- brm(cp_con_bf + lp_con_bf + row_con_bf + 
+                              cp_ecc_bf + lp_ecc_bf + row_ecc_bf + 
+                              set_rescor(rescor = TRUE),
+                              data = isokinetic_data_delta,
                               chains = 4,
                               cores = 4,
                               seed = 1988,
@@ -620,78 +653,128 @@ brm_model_isokinetic_cp <- brm(con_bf + ecc_bf,
                               control = list(adapt_delta = 0.99),
                               save_pars = save_pars(all = TRUE))
 
-draws_isokinetic_cp <- spread_draws(brm_model_isokinetic_cp,
-                                    sigma_con,
-                                    sigma_ecc
-                                   ) |>
+draws_isokinetic <- gather_draws(brm_model_isokinetic,
+                                    b_deltacpcon_Intercept, b_deltalpcon_Intercept, b_deltarowcon_Intercept,
+                                    b_deltacpecc_Intercept, b_deltalpecc_Intercept, b_deltarowecc_Intercept,
+                                 sigma_deltacpcon, sigma_deltalpcon, sigma_deltarowcon,
+                                 sigma_deltacpecc, sigma_deltalpecc, sigma_deltarowecc,
+                                 ) |>
+  mutate(exercise = case_when(
+    str_detect(.variable, pattern = "cp") ~ "cp",
+    str_detect(.variable, pattern = "lp") ~ "lp", 
+    str_detect(.variable, pattern = "row") ~ "row"
+  ),
+  con_ecc = case_when(
+    str_detect(.variable, pattern = "con") ~ "con", 
+    str_detect(.variable, pattern = "ecc") ~ "ecc"
+  ),
+  .variable = case_when(
+    str_detect(.variable, pattern = "b_delta") ~ "bias", 
+    str_detect(.variable, pattern = "sigma") ~ "sigma", 
+    str_detect(.variable, pattern = "sigma") ~ "sigma"
+  )) |>
+  pivot_wider(names_from = ".variable",
+              values_from = ".value",
+              id_cols = c(".chain", ".iteration", ".draw", "exercise", "con_ecc")) |>
   mutate(
-    loam_bw_days_con = 1.96 * sigma_con,
-    loam_bw_days_ecc = 1.96 * sigma_ecc
+    loa = 1.96 * sigma,
   ) 
 
-loamr_summary_isokinetic_cp <- draws_isokinetic_cp |>
-  mean_qi(loam_bw_days_con, loam_bw_days_ecc) 
+isokinetic_loa_summary <- draws_isokinetic |>
+  group_by(exercise, con_ecc) |>
+  mean_qi(bias, loa) |>
+  left_join(isokinetic_data_delta |>  select(contains("mean")) |>
+              pivot_longer(1:6,
+                           names_to = "what",
+                           values_to = "mean") |>
+              mutate(con_ecc = case_when(
+                str_detect(what, pattern = "con") ~ "con", 
+                str_detect(what, pattern = "ecc") ~ "ecc", 
+              ), 
+            exercise = case_when(
+              str_detect(what, pattern = "cp") ~ "cp", 
+              str_detect(what, pattern = "lp") ~ "lp", 
+              str_detect(what, pattern = "row") ~ "row"
+            )),
+            by = c("exercise", "con_ecc")) |>
+  mutate(exercise = case_when(
+    exercise == "cp" ~ "Chest Press",
+    exercise == "lp" ~ "Leg Press",
+    exercise == "row" ~ "Row"
+  ),
+  con_ecc = case_when(
+    con_ecc == "con" ~ "Concentric",
+    con_ecc == "ecc" ~ "Eccentric"
+  ))
 
-loam_plot_cp_con <- isokinetic_data_cp |>
-  filter(con_ecc == "con") |>
-  ggplot(aes(x=mean_i, y=mean_diff)) +
+loa_plot_isokinetic <- isokinetic_data_delta |> select(participant, contains("mean"), contains("delta")) |>
+  pivot_longer(2:13,
+               names_to = c("coef", "exercise", "con_ecc"),
+               values_to =  "value",
+               names_sep = "_") |>
+  pivot_wider(names_from = "coef",
+              values_from = "value",
+              id_cols = c("participant", "exercise", "con_ecc")) |>
+  mutate(exercise = case_when(
+    exercise == "cp" ~ "Chest Press",
+    exercise == "lp" ~ "Leg Press",
+    exercise == "row" ~ "Row"
+  ),
+  con_ecc = case_when(
+    con_ecc == "con" ~ "Concentric",
+    con_ecc == "ecc" ~ "Eccentric"
+  )) |>
+  ggplot() +
   geom_hline(yintercept = 0, linetype = "dashed") +
-  annotate("rect", xmin = -Inf, xmax = Inf, 
-           ymin = loamr_summary_isokinetic_cp$loam_bw_days_con.lower, ymax = loamr_summary_isokinetic_cp$loam_bw_days_con.upper,
-           alpha = 0.5, fill = "#56B4E9") +
-  annotate("rect", xmin = -Inf, xmax = Inf, 
-           ymin = -loamr_summary_isokinetic_cp$loam_bw_days_con.lower, ymax = -loamr_summary_isokinetic_cp$loam_bw_days_con.upper,
-           alpha = 0.5, fill = "#56B4E9") +
   
-  geom_hline(yintercept = c(-loamr_summary_isokinetic_cp$loam_bw_days_con,loamr_summary_isokinetic_cp$loam_bw_days_con)) +
+  geom_ribbon(data = isokinetic_loa_summary,
+              aes(x=mean, ymin = bias.lower, ymax = bias.upper),
+              alpha = 0.5) +
+  geom_ribbon(data = isokinetic_loa_summary,
+              aes(x=mean, ymin = bias-loa.upper, ymax = bias-loa.lower),
+              alpha = 0.5) +
+  geom_ribbon(data = isokinetic_loa_summary,
+              aes(x=mean, ymin = bias+loa.upper, ymax = bias+loa.lower),
+              alpha = 0.5) +
+  geom_line(data = isokinetic_loa_summary,
+            aes(x=mean, y = bias)) +
+  geom_line(data = isokinetic_loa_summary,
+            aes(x=mean, y = bias-loa)) +
+  geom_line(data = isokinetic_loa_summary,
+            aes(x=mean, y = bias+loa)) +
+  geom_point(aes(x=mean, y=delta), alpha = 0.75) +
   
-  geom_label(data = isokinetic_data_cp |> filter(con_ecc == "con") |> group_by(participant) |> slice_max(mean_diff, n=1),
-             aes(x = mean_i, y = mean_diff + 10, label = participant)) +
-  geom_point(size = 2, color = "black", fill = NA, shape = 21, alpha = 0.75) +
-  geom_point(aes(color=day), alpha = 0.75) +
-  scale_color_viridis_d() +
-  scale_y_continuous(breaks = seq(-100, 100, by=10)) +
+  geom_text(data = isokinetic_loa_summary |> group_by(exercise, con_ecc) |> 
+              mutate(x = (max(mean) - min(mean))/2, y = (-loa.upper*1.25)) |> slice_min(mean, n=1) |> slice_head(n=1),
+            aes(x=mean + x, y=y, group=exercise, 
+                label=glue::glue("Mean bias: {round(bias,2)} [95% QI: {round(bias.lower,2)},{round(bias.upper,2)}]\nLimits of Agreement: +/- {round(loa,2)} [95% QI: {round(loa.lower,2)},{round(loa.upper,2)}]")),
+            size = 2.5, vjust=-0.1) +
+  scale_y_continuous(breaks = seq(-200, 200, by=25)) +
+  ggh4x::facet_grid2(con_ecc~exercise, scales = "free", independent = "all") +
+  
   labs(
-    title = "Chest Press Exercise - Concentric",
-    subtitle = glue::glue("Between-day trial to trial limits of agreement: +/- {round(loamr_summary_isokinetic_cp$loam_bw_days_con,2)} [95% QI: {round(loamr_summary_isokinetic_cp$loam_bw_days_con.lower,2)},{round(loamr_summary_isokinetic_cp$loam_bw_days_con.upper,2)}]"),
-    x = "Mean Force (N)",
-    y = "Difference from the Participant Mean (N)",
-    color = "Day"
+    title = "Mean Bias and Limits of Agreement",
+    x = expression(bar(y)[i.]),
+    y = expression(y[i2]-y[i1]),
+    
   ) +
   theme_bw()
 
-loam_plot_cp_ecc <- isokinetic_data_cp |>
-  filter(con_ecc == "ecc") |>
-  ggplot(aes(x=mean_i, y=mean_diff)) +
-  geom_hline(yintercept = 0, linetype = "dashed") +
-  annotate("rect", xmin = -Inf, xmax = Inf, 
-           ymin = loamr_summary_isokinetic_cp$loam_bw_days_ecc.lower, ymax = loamr_summary_isokinetic_cp$loam_bw_days_ecc.upper,
-           alpha = 0.5, fill = "#56B4E9") +
-  annotate("rect", xmin = -Inf, xmax = Inf, 
-           ymin = -loamr_summary_isokinetic_cp$loam_bw_days_ecc.lower, ymax = -loamr_summary_isokinetic_cp$loam_bw_days_ecc.upper,
-           alpha = 0.5, fill = "#56B4E9") +
   
-  geom_hline(yintercept = c(-loamr_summary_isokinetic_cp$loam_bw_days_ecc,loamr_summary_isokinetic_cp$loam_bw_days_ecc)) +
+loa_plot_isokinetic
   
-  geom_label(data = isokinetic_data_cp |> filter(con_ecc == "ecc") |> group_by(participant) |> slice_max(mean_diff, n=1),
-             aes(x = mean_i, y = mean_diff + 10, label = participant)) +
-  geom_point(size = 2, color = "black", fill = NA, shape = 21, alpha = 0.75) +
-  geom_point(aes(color=day), alpha = 0.75) +
-  scale_color_viridis_d() +
-  scale_y_continuous(breaks = seq(-100, 100, by=10)) +
-  labs(
-    title = "Chest Press Exercise - Eccentric",
-    subtitle = glue::glue("Between-day trial to trial limits of agreement: +/- {round(loamr_summary_isokinetic_cp$loam_bw_days_ecc,2)} [95% QI: {round(loamr_summary_isokinetic_cp$loam_bw_days_ecc.lower,2)},{round(loamr_summary_isokinetic_cp$loam_bw_days_ecc.upper,2)}]"),
-    x = "Mean Force (N)",
-    y = "Difference from the Participant Mean (N)",
-    color = "Day"
-  ) +
-  theme_bw()
-
-(loam_plot_cp_con | loam_plot_cp_ecc ) +
-  # (loam_plot_lp_con | loam_plot_lp_ecc ) +
-  # (loam_plot_row_con | loam_plot_row_ecc ) 
-  plot_layout(guides = "collect") +
-  plot_annotation(title = "Limits of Agreement with the Mean",
-                  caption = "Note, the solid horizontal lines with pale blue ribbons show the between day limits of agreement,\nnumeric labels are participant numbers")
-
+  
+  
+  
+  isokinetic_data_delta |>
+    group_by(exercise) |>
+    summarise(mean_con = mean(delta_con),
+              mean_ecc = mean(delta_ecc),
+              sd_con = sd(delta_con),
+              sd_ecc = sd(delta_ecc),
+              loa_l_con = mean_con-(1.96*sd_con),
+              loa_u_con = mean_con+(1.96*sd_con),
+              loa_l_ecc = mean_ecc-(1.96*sd_ecc),
+              loa_u_ecc = mean_ecc+(1.96*sd_ecc)
+  )
+  

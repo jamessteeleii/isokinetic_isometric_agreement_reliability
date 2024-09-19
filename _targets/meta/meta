@@ -1,19 +1,31 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+combined_isometric_plot|stem|8d9c41adea601a47|6e792700e56a9861|6d925299cfc1a0da|2044976524||t19985.5789342903s|2c8c2de5c8c566df|8437804|rds|local|vector|||0.16||
 data|stem|2ff46fa6d63ad378|bf6275f653d53dd4|b9952bd51cccea52|33550471||t19984.5934224582s|d1ec28f89e6eaddb|3785|rds|local|vector|||0.72||
 file|stem|c20bcd8480d8f847|ee6cebdffc9a61e4|2c530c1562a7fbd1|1735323524|C:/Users/james/Dropbox/Research/Exercise Coach/isokinetic_isometric_agreement_reliability/data/data.csv|t19979.6883428076s|16d04af8c751579f|5748|file|local|vector|||6.05||
+fit_isokinetic_model|function|bdd8f24a5645398d|||||||||||||||
 fit_isometric_model|function|ae7ff73444859afe|||||||||||||||
+get_isokinetic_bias_loa_summary|function|30cfaf3009d66fa5|||||||||||||||
+get_isokinetic_draws|function|59d4d0aab1f9a751|||||||||||||||
 get_isometric_bias_summary|function|b7d18d4307680e8f|||||||||||||||
 get_isometric_draws|function|6b2c40a58310119c|||||||||||||||
 get_isometric_loamr_summary|function|650fdcb8a2a42816|||||||||||||||
-isokinetic_data|stem|f487116f74b012de|050477b453f1eede|5177e098a0d06a60|-752093902||t19984.5944274559s|84428f56d61b88f9|1626|rds|local|vector|||0.03||
+isokinetic_BA_plot|stem|dd3e65b45c3c8b5d|a3546c5923c0dd95|30e0efdeeaf41da3|-1791420041||t19985.5773333179s|1791d25a902f08a6|307086|rds|local|vector|||0.09||
+isokinetic_BA_plot_tiff|stem|6aa32096245e8e61|a52262970327e1ba|aa1858e23f51af74|1769950410||t19985.5773547073s|87bbe5f41aaaedf6|80|rds|local|vector|||0.64||
+isokinetic_bias_loa_summary|stem|54affe3af36a5fe3|df0fde97ca8efa24|3485a42cf1cfd86e|1513574960||t19985.5688910245s|c8eb026e18a8d85b|986|rds|local|vector|||0.06||
+isokinetic_data|stem|033162e5ff7c29fb|050477b453f1eede|a4edd0e4e36f4af8|-752093902||t19985.5677586727s|730bcf63838b3e9c|1106|rds|local|vector|||0.08||
+isokinetic_draws|stem|7177e57550833527|b5e8fc39fed93132|8c6c0ee4cb063e99|616644068||t19985.5688900582s|70641bef19b557e1|3587844|rds|local|vector|||1.2||
+isokinetic_model|stem|f515df801aa4487f|d23dac4ccfd38101|c606936a644b6de0|1582009063||t19985.5688734253s|e3b68f10b727221f|29362039|rds|local|vector|||94.79||
 isometric_bias_plot|stem|1493efb6f34f5ed2|161f9caaa8152f08|868d7d9a39ca50dd|619079591||t19984.6667442908s|67c62c5a6814ea2e|8087487|rds|local|vector|||1.7||
 isometric_bias_summary|stem|682e8e5ba41af2a1|70b10c2c2950f838|c0c6cf8b004b23e1|915718745||t19984.6667141126s|c8c427a644ae7cad|419|rds|local|vector|||1.83||
 isometric_data|stem|ed62e575a095b21f|bebe69adaf0b6da9|5d376f7fef536e68|1348213187||t19984.5944283077s|1931b44881fa2863|3630|rds|local|vector|||0.06||
 isometric_draws|stem|76e0dd14c8d8e060|e75eb339839d57f7|b3a198f62b54f715|-1456788329||t19984.6660591181s|73a1ce8b150b34ee|3306682|rds|local|vector|||0.84||
-isometric_loamr_plot|stem|a6a3c5728614735a|f4b63a9a62d83da7|294bbe969e6276a2|-107861230||t19984.6667179939s|e92dc1cf0fb3adbc|333307|rds|local|vector|||0.2||
+isometric_loamr_plot|stem|86539d1f99f5bc54|f4b63a9a62d83da7|0ee8a9e6cc5e0dbd|-107861230||t19985.5789203993s|4c8dec42bccd73de|349618|rds|local|vector|||0.19||
 isometric_loamr_summary|stem|28b9e01c98115e67|5d77712d8f594d9f|a1c49bf7791ee223|1199122691||t19984.6666927776s|8d5a8020674ecafb|988|rds|local|vector|||0.14|Detected an unexpected manytomany relationship between x and y.ℹ Row 1 of x matches multiple rows in y.ℹ Row 1 of y matches multiple rows in x.ℹ If a manytomany relationship is expected, set relationship   manytomany to silence this warning.|
 isometric_model|stem|ebab45b1f6f162a4|ec65a99abf8923c4|5695414377ec4144|1609790368||t19984.6660468558s|4b3c9f341a94291e|190006062|rds|local|vector|||316.78|There were 2 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. Seehttpsmcstan.orgmiscwarnings.htmlmaximumtreedepthexceeded. Examine the pairs plot to diagnose sampling problems|
+isometric_plot_tiff|stem|75a79a1489788b8a|594817e6a36a60b0|e1f2bef19181daa5|-779365480||t19985.578952351s|e12065d620e41fd5|76|rds|local|vector|||1.55||
+make_plot_tiff|function|d824f2b8d85c6ffb|||||||||||||||
+plot_isokinetic_BA|function|ec720c35ea11bcd5|||||||||||||||
 plot_isometric_bias|function|929f9e94341729db|||||||||||||||
-plot_isometric_loamr|function|9c82c22867595a0d|||||||||||||||
-prepare_isokinetic_data|function|b4358e1486920989|||||||||||||||
+plot_isometric_loamr|function|e725b607945411b6|||||||||||||||
+prepare_isokinetic_data|function|b2d605f05266a406|||||||||||||||
 prepare_isometric_data|function|84dd871287950d74|||||||||||||||

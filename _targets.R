@@ -66,14 +66,24 @@ list(
   tar_target(isometric_data, prepare_isometric_data(data)),
   tar_target(isokinetic_data, prepare_isokinetic_data(data)),
   
-  # Fit and plot isometric models
+  # Fit and plot isometric model
   tar_target(isometric_model, fit_isometric_model(isometric_data)),
   tar_target(isometric_draws, get_isometric_draws(isometric_model, isometric_data)),
   tar_target(isometric_bias_summary, get_isometric_bias_summary(isometric_draws)),
   tar_target(isometric_loamr_summary, get_isometric_loamr_summary(isometric_data,isometric_draws)),
   tar_target(isometric_bias_plot, plot_isometric_bias(isometric_draws, isometric_bias_summary)),
-  tar_target(isometric_loamr_plot, plot_isometric_loamr(isometric_data, isometric_loamr_summary))
+  tar_target(isometric_loamr_plot, plot_isometric_loamr(isometric_data, isometric_loamr_summary)),
+  tar_target(combined_isometric_plot, (isometric_bias_plot / isometric_loamr_plot) +
+               plot_annotation(caption = "Note, the solid horizontal lines (point estimates) with pale blue ribbons (95% quantile intervals) show the between day limits of agreement,\nthe dotted horizontal lines (point estimates) with pale orange ribbons (95% quantile intervals) show the within day limits of agreement") &
+               theme(plot.caption = element_text(size=6))),
+  tar_target(isometric_plot_tiff, make_plot_tiff(combined_isometric_plot, 10, 6.66, "plots/isometric_plot.tiff")),
   
+  # Fit and plot isokinetic model
+  tar_target(isokinetic_model, fit_isokinetic_model(isokinetic_data)),
+  tar_target(isokinetic_draws, get_isokinetic_draws(isokinetic_model)),
+  tar_target(isokinetic_bias_loa_summary, get_isokinetic_bias_loa_summary(isokinetic_draws, isokinetic_data)),
+  tar_target(isokinetic_BA_plot, plot_isokinetic_BA(isokinetic_bias_loa_summary, isokinetic_data)),
+  tar_target(isokinetic_BA_plot_tiff, make_plot_tiff(isokinetic_BA_plot, 10, 6.66, "plots/isokinetic_BA_plot.tiff"))
   
   )
 

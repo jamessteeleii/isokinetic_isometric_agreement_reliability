@@ -1,5 +1,6 @@
 ##### This script contains all the functions for the targets pipeline
 
+# Preparing data
 prepare_isometric_data <- function(data) {
   isometric_data <- data |>
   select(1:15, contains("max")) |>
@@ -32,13 +33,40 @@ prepare_isokinetic_data <- function(data) {
     day == "t1" ~ "d1",
     day == "t2" ~ "d2"
   )) |> 
-  mutate_if(is.character,as.factor)
-  
-  contrasts(isokinetic_data$day) <- contr.helmert(2)
+  mutate_if(is.character,as.factor) |>
+    pivot_wider(names_from = c("day", "exercise", "con_ecc"),
+                values_from = "value",
+                id_cols = c("participant")) |>
+    mutate(delta_cp_con = d2_cp_con - d1_cp_con,
+           mean_cp_con = (d1_cp_con + d2_cp_con)/1,
+           delta_lp_con = d2_lp_con - d1_lp_con,
+           mean_lp_con = (d1_lp_con + d2_lp_con)/1,
+           delta_row_con = d2_row_con - d1_row_con,
+           mean_row_con = (d1_row_con + d2_row_con)/1,
+           delta_cp_ecc = d2_cp_ecc - d1_cp_ecc,
+           mean_cp_ecc = (d1_cp_ecc + d2_cp_ecc)/1,
+           delta_lp_ecc = d2_lp_ecc - d1_lp_ecc,
+           mean_lp_ecc = (d1_lp_ecc + d2_lp_ecc)/1,
+           delta_row_ecc = d2_row_ecc - d1_row_ecc,
+           mean_row_ecc = (d1_row_ecc + d2_row_ecc)/1) 
   
   isokinetic_data
 }
 
+# Misc functions
+make_plot_tiff <- function(plot, width, height, path) {
+  ggsave(
+    path,
+    plot,
+    width = width,
+    height = height,
+    device = "tiff",
+    dpi = 300
+  )
+  
+}
+
+# Isometric models and plots
 fit_isometric_model <- function(isometric_data) {
   isometric_data_wide <- isometric_data |>
     select(participant, exercise, day, trial, value) |>
@@ -217,10 +245,154 @@ plot_isometric_loamr <- function(isometric_data, isometric_loamr_summary) {
     ggh4x::facet_grid2(.~exercise, scales = "free", independent = "x") +
     labs(
       title = "Limits of Agreement with the Mean",
-      caption = "Note, the solid horizontal lines with pale blue ribbons show the between day limits of agreement,\nthe dotted horizontal lines with pale orange ribbons show the within day limits of agreement",
       x = expression(bar(y)[i..]),
       y = expression(y[ijk]-bar(y)[i..]),
       color = "Day"
     ) +
     theme_bw()
+    
+}
+
+# Isokinetic models and plots
+fit_isokinetic_model <- function(isokinetic_data) {
+  
+  cp_con_bf <- bf(delta_cp_con ~ 1)
+  
+  lp_con_bf <- bf(delta_lp_con ~ 1)
+  
+  row_con_bf <- bf(delta_row_con ~ 1)
+  
+  cp_ecc_bf <- bf(delta_cp_ecc ~ 1)
+  
+  lp_ecc_bf <- bf(delta_lp_ecc ~ 1)
+  
+  row_ecc_bf <- bf(delta_row_ecc ~ 1)
+  
+  
+  brm_model_isokinetic <- brm(cp_con_bf + lp_con_bf + row_con_bf + 
+                                cp_ecc_bf + lp_ecc_bf + row_ecc_bf + 
+                                set_rescor(rescor = TRUE),
+                              data = isokinetic_data,
+                              chains = 4,
+                              cores = 4,
+                              seed = 1988,
+                              warmup = 2000,
+                              iter = 8000,
+                              control = list(adapt_delta = 0.99),
+                              save_pars = save_pars(all = TRUE))
+  
+}
+
+get_isokinetic_draws <- function(isokinetic_model) {
+  draws_isokinetic <- gather_draws(isokinetic_model,
+                                   b_deltacpcon_Intercept, b_deltalpcon_Intercept, b_deltarowcon_Intercept,
+                                   b_deltacpecc_Intercept, b_deltalpecc_Intercept, b_deltarowecc_Intercept,
+                                   sigma_deltacpcon, sigma_deltalpcon, sigma_deltarowcon,
+                                   sigma_deltacpecc, sigma_deltalpecc, sigma_deltarowecc,
+  ) |>
+    mutate(exercise = case_when(
+      str_detect(.variable, pattern = "cp") ~ "cp",
+      str_detect(.variable, pattern = "lp") ~ "lp", 
+      str_detect(.variable, pattern = "row") ~ "row"
+    ),
+    con_ecc = case_when(
+      str_detect(.variable, pattern = "con") ~ "con", 
+      str_detect(.variable, pattern = "ecc") ~ "ecc"
+    ),
+    .variable = case_when(
+      str_detect(.variable, pattern = "b_delta") ~ "bias", 
+      str_detect(.variable, pattern = "sigma") ~ "sigma", 
+      str_detect(.variable, pattern = "sigma") ~ "sigma"
+    )) |>
+    pivot_wider(names_from = ".variable",
+                values_from = ".value",
+                id_cols = c(".chain", ".iteration", ".draw", "exercise", "con_ecc")) |>
+    mutate(
+      loa = 1.96 * sigma,
+    ) 
+}
+
+get_isokinetic_bias_loa_summary <- function(isokinetic_draws, isokinetic_data) {
+  isokinetic_bias_loa_summary <- isokinetic_draws |>
+    group_by(exercise, con_ecc) |>
+    mean_qi(bias, loa) |>
+    left_join(isokinetic_data |>  select(contains("mean")) |>
+                pivot_longer(1:6,
+                             names_to = "what",
+                             values_to = "mean") |>
+                mutate(con_ecc = case_when(
+                  str_detect(what, pattern = "con") ~ "con", 
+                  str_detect(what, pattern = "ecc") ~ "ecc", 
+                ), 
+                exercise = case_when(
+                  str_detect(what, pattern = "cp") ~ "cp", 
+                  str_detect(what, pattern = "lp") ~ "lp", 
+                  str_detect(what, pattern = "row") ~ "row"
+                )),
+              by = c("exercise", "con_ecc")) |>
+    mutate(exercise = case_when(
+      exercise == "cp" ~ "Chest Press",
+      exercise == "lp" ~ "Leg Press",
+      exercise == "row" ~ "Row"
+    ),
+    con_ecc = case_when(
+      con_ecc == "con" ~ "Concentric",
+      con_ecc == "ecc" ~ "Eccentric"
+    ))
+}
+
+plot_isokinetic_BA <- function(isokinetic_bias_loa_summary, isokinetic_data) {
+  loa_plot_isokinetic <- isokinetic_data |> select(participant, contains("mean"), contains("delta")) |>
+    pivot_longer(2:13,
+                 names_to = c("coef", "exercise", "con_ecc"),
+                 values_to =  "value",
+                 names_sep = "_") |>
+    pivot_wider(names_from = "coef",
+                values_from = "value",
+                id_cols = c("participant", "exercise", "con_ecc")) |>
+    mutate(exercise = case_when(
+      exercise == "cp" ~ "Chest Press",
+      exercise == "lp" ~ "Leg Press",
+      exercise == "row" ~ "Row"
+    ),
+    con_ecc = case_when(
+      con_ecc == "con" ~ "Concentric",
+      con_ecc == "ecc" ~ "Eccentric"
+    )) |>
+    ggplot() +
+    geom_hline(yintercept = 0, linetype = "dashed") +
+    
+    geom_ribbon(data = isokinetic_bias_loa_summary,
+                aes(x=mean, ymin = bias.lower, ymax = bias.upper),
+                alpha = 0.5) +
+    geom_ribbon(data = isokinetic_bias_loa_summary,
+                aes(x=mean, ymin = bias-loa.upper, ymax = bias-loa.lower),
+                alpha = 0.5) +
+    geom_ribbon(data = isokinetic_bias_loa_summary,
+                aes(x=mean, ymin = bias+loa.upper, ymax = bias+loa.lower),
+                alpha = 0.5) +
+    geom_line(data = isokinetic_bias_loa_summary,
+              aes(x=mean, y = bias)) +
+    geom_line(data = isokinetic_bias_loa_summary,
+              aes(x=mean, y = bias-loa)) +
+    geom_line(data = isokinetic_bias_loa_summary,
+              aes(x=mean, y = bias+loa)) +
+    geom_point(aes(x=mean, y=delta), alpha = 0.75) +
+    
+    geom_text(data = isokinetic_bias_loa_summary |> group_by(exercise, con_ecc) |> 
+                mutate(x = (max(mean) - min(mean))/2, y = (-loa.upper*1.25)) |> slice_min(mean, n=1) |> slice_head(n=1),
+              aes(x=mean + x, y=y, group=exercise, 
+                  label=glue::glue("Mean bias: {round(bias,2)} [95% QI: {round(bias.lower,2)},{round(bias.upper,2)}]\nLimits of Agreement: +/- {round(loa,2)} [95% QI: {round(loa.lower,2)},{round(loa.upper,2)}]")),
+              size = 2.5, vjust=-0.05) +
+    scale_y_continuous(breaks = seq(-200, 200, by=25)) +
+    ggh4x::facet_grid2(con_ecc~exercise, scales = "free", independent = "all") +
+    
+    labs(
+      title = "Mean Bias and Limits of Agreement",
+      caption = "Note, the upper, middle, and lower solid horizontal lines (point estimate) with grey ribbons (95% quantile intervals) show the between day upper 95% limit of agreement, the mean bias, and lower 95% limit of agreement respectively",
+      x = expression(bar(y)[i.]),
+      y = expression(y[i2]-y[i1])
+    ) +
+    theme_bw() +
+    theme(plot.caption = element_text(size=6))
 }
