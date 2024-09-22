@@ -1,0 +1,183 @@
+---
+title: "Statistical Analysis and Results"
+format: 
+  docx:
+    toc: false
+    number-sections: true
+    highlight-style: github
+    # prefer-html: true
+bibliography: 
+  references.bib
+csl: apa.csl
+---
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+#| include: false
+
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+options(knitr.kable.NA = '')
+
+library(tidyverse)
+library(patchwork)
+
+```
+
+# Statistical Analysis
+
+All code utilised for data preparation and analyses are available in either the Open Science Framework page for this project <https://osf.io/zrxjp/> or the corresponding GitHub repository <https://github.com/jamessteeleii/isokinetic_isometric_agreement_reliability>. We cite all software and packages used in the analysis pipeline using the `grateful` package [@rodriguez-sanchezGratefulFacilitateCitation2023] which can be seen here: <https://osf.io/pgx6v>. This project was not pre-registered, but had an exploratory estimation goal. All analyses have been conducted within a Bayesian posterior estimation framework and all posterior estimates and their precision, along with conclusions based upon them, will be interpreted continuously and probabilistically, considering priors, data quality, and all within the context of each outcome and the assumptions of the model employed as the estimator [@kruschkeBayesianNewStatistics2018]. Given that most utilisation of strength measurement is for the purpose of determining whether a change has occurred from test-to-test, we focused on the *agreement* of measurements as opposed to the typical *reliability* statistics which instead reflect the ability of measurements to distinguish between individuals [@vetWhenUseAgreement2006a; kottnerDifferenceReliabilityAgreement2011; berchtoldTestRetestAgreement2016]. Here we also employed multivariate mixed effects methods for examining agreement by variance components enabling us to model all three exercises, chest press, leg press, and row, simultaneously extending previous approaches [@schluterMultivariateHierarchicalBayesian2009] thus offering greater precision, robustness, and efficiency of estimates. Two sets of models, each detailed below, were used to examine both the between- and within-day agreement for isometric outcomes, and for between-day agreement for isokinetic outcomes. In each model we employed informative yet weakly regularising priors which are detailed below. Trace plots were produced along with $\hat{R}$ values to examine whether chains had converged, and posterior predictive checks for each model were also examined to understand the model implied distributions.
+
+## Isometric Outcomes
+Given that for isometric outcomes we had both three repeated days of testing, and two repeated trials within each day, we opted to adapt the methods described by Jones et al. [-@jonesGraphicalMethodAssessing2011] and Christensen et al. [-@christensenJonesAlsMethod2020] to derive the limits of agreement with the mean. Typically where there are two measurements to compare in terms of agreement the traditional Bland-Altman Limits of Agreement approach can be employed [@blandStatisticalMethodsAssessing1986a]. When there are multiple measurements (whether multiple methods, observers, or tests, or whether there are replicates within these) it is more difficult to apply these typical models. Instead, we can model the outcomes directly and derive the agreement with the *mean* value for the participant over the repeated measurements made. In the case where we can assume there is no bias for a particular measurement (in our case no particular bias across days for example), then we can assume that the mean reflects a good estimate of the true value and the 95% limits of agreement then reflect  the range over which we would expect measurements to fall about the true value 95% of the time. 
+
+In the present case we sought to partition the variance components such that we could determine separately the between-participant variance (i.e., $\alpha_{0i}$ below), the between-day variance (i.e.,  $\alpha_{1ij}$ below), and the residual variance which here reflects the within-day variance (i.e., $\alpha_{\mu_{ij}}$ below). We estimate these variance components through a multivariate mixed effects model of the joint three exercise outcomes observed (chest press, leg press, and row; see #eq-isometric-model). The model included a population (i.e., fixed) effect for day which was Helmert coded; This meant that for the three days we have two coefficients in the model for each outcome with the first, $\beta_{1}\text{Day}$ below, reflecting the difference between the mean of day one and the mean of day two and three, and the second, $\beta_{2}\text{Day}$ below, reflected the difference between mean of day two and the mean of day three. This allowed us to examine whether there was any systematic bias, and in this case the Helmert coding was specifically used because we anticipated that any bias would manifest in terms of a "familiarisation" effect whereby participants improved systematically with repeated measurement. The model also included random (i.e., group level terms) intercepts for participants (i.e., $\alpha_{0i}$ below), and random intercepts for day nested within participant (i.e., $\alpha_{1ij}$ below). Each of these were modelled as correlated between outcomes reflecting the models assumption that typically participants that are stronger are stronger across each exercise tested (i.e., strength is correlated between exercises), and also that variation across days was likely to also be related reflecting that lower/higher values on a given exercise on one day would likely be related to lower/higher values on a different exercise on that day. Lastly, the residual errors were also modelled as correlated. The model for isometric measurements can thus be represented as follows in #eq-isometric-model:
+
+$$
+\begin{equation}
+\begin{aligned}
+\left[
+  \begin{array}{c} 
+    \begin{aligned}
+      &\text{Chest Press}_{ijk} \\
+      &\text{Leg Press}_{ijk} \\
+      &\text{Row}_{ijk}
+    \end{aligned}
+  \end{array}
+  \right]
+    &\sim MVN \left(
+\left[
+  \begin{array}{c} 
+    \begin{aligned}
+      &\mu^\text{Chest Press}_{ij} \\
+      &\mu^\text{Leg Press}_{ij} \\
+      &\mu^\text{Row}_{ij}
+    \end{aligned}
+  \end{array}
+\right], 
+\Sigma_{obs}
+\right) \\
+ \mu^\text{Chest Press}_{ij} &=\beta^\text{Chest Press}_{0} + \beta^\text{Chest Press}_{1}\text{Day}_{1} + \beta^\text{Chest Press}_{2}\text{Day}_{2} + \alpha^\text{Chest Press}_{0i} + \alpha^\text{Chest Press}_{1ij} \\
+ \mu^\text{Leg Press}_{ij} &=\beta^\text{Leg Press}_{0} + \beta^\text{Leg Press}_{1}\text{Day}_{1} + \beta^\text{Leg Press}_{2}\text{Day}_{2} + \alpha^\text{Leg Press}_{0i} + \alpha^\text{Leg Press}_{1ij} \\
+ \mu^\text{Row}_{ij} &=\beta^\text{Row}_{0} + \beta^\text{Row}_{1}\text{Day}_{1} + \beta^\text{Row}_{2}\text{Day}_{2} + \alpha^\text{Row}_{0i} + \alpha^\text{Row}_{1ij} \\
+ \left[
+  \begin{array}{c} 
+    \begin{aligned}
+      &\alpha^\text{Chest Press}_{0i} \\
+      &\alpha^\text{Leg Press}_{0i} \\
+      &\alpha^\text{Row}_{0i}
+    \end{aligned}
+  \end{array}
+  \right]
+    &\sim MVN \left(
+0,\Sigma_{Participant}
+\right) \\
+\left[
+  \begin{array}{c} 
+    \begin{aligned}
+      &\alpha^\text{Chest Press}_{1ij} \\
+      &\alpha^\text{Leg Press}_{1ij} \\
+      &\alpha^\text{Row}_{1ij}
+    \end{aligned}
+  \end{array}
+  \right]
+    &\sim MVN \left(
+0,\Sigma_{Participant:Day} 
+\right) \\
+\Sigma_{Obs} &=
+\left(
+  \begin{array}{ccc}
+     \sigma_{\mu^\text{Chest Press}_{ij}} & 0 & 0 \\ 
+     0 & \sigma_{\mu^\text{Leg Press}_{ij}} & 0 \\ 
+     0 & 0 & \sigma_{\mu^\text{Row}_{ij}}
+  \end{array}
+\right) 
+\text{R}
+\left(
+  \begin{array}{ccc}
+     \sigma_{\mu^\text{Chest Press}_{ij}} & 0 & 0 \\ 
+     0 & \sigma_{\mu^\text{Leg Press}_{ij}} & 0 \\ 
+     0 & 0 & \sigma_{\mu^\text{Row}_{ij}}
+  \end{array}
+\right) \\
+\Sigma_{Participant} &=
+\left(
+  \begin{array}{ccc}
+     \sigma_{\alpha^\text{Chest Press}_{0i}} & 0 & 0 \\ 
+     0 & \sigma_{\alpha^\text{Leg Press}_{0i}} & 0 \\ 
+     0 & 0 & \sigma_{\alpha^\text{Row}_{0i}}
+  \end{array}
+\right) 
+\text{R}
+\left(
+  \begin{array}{ccc}
+     \sigma_{\alpha^\text{Chest Press}_{0i}} & 0 & 0 \\ 
+     0 & \sigma_{\alpha^\text{Leg Press}_{0i}} & 0 \\ 
+     0 & 0 & \sigma_{\alpha^\text{Row}_{0i}}
+  \end{array}
+\right) \\
+\Sigma_{Participant:Day} &=
+\left(
+  \begin{array}{ccc}
+     \sigma_{\alpha^\text{Chest Press}_{1ij}} & 0 & 0 \\ 
+     0 & \sigma_{\alpha^\text{Leg Press}_{1ij}} & 0 \\ 
+     0 & 0 & \sigma_{\alpha^\text{Row}_{1ij}}
+  \end{array}
+\right) 
+\text{R}
+\left(
+  \begin{array}{ccc}
+     \sigma_{\alpha^\text{Chest Press}_{1ij}} & 0 & 0 \\ 
+     0 & \sigma_{\alpha^\text{Leg Press}_{1ij}} & 0 \\ 
+     0 & 0 & \sigma_{\alpha^\text{Row}_{1ij}}
+  \end{array}
+\right)
+\end{aligned}
+\end{equation}
+$$ {#eq-isometric-model}
+
+where each exercise outcome is represented by a superscript for observations and model parameters (i.e., $\text{Chest Press}, \text{Leg Press}, or\ \text{Row}$), and for a given exercise the subscripts reflect the $k$th measurement ($\text{k = 1,} \dots \text{,K}$), from the $j$th day ($\text{j = 1,} \dots \text{,J}$) for the $i$th participant ($\text{i = 1,} \dots \text{,I}$). Population and group (i.e., fixed and random) parameters are described above. The covariance matrices for observations, random intercepts for participant, and random intercepts for day within participant are given by $\Sigma_{Obs}$, $\Sigma_{Obs}$, $\Sigma_{Obs}$.
+
+As mentioned above we adopted informative yet weakly regularising priors. Default priors in the `brms` R package used to fit the model are weakly regularising on all intercept terms (i.e., $\beta_{0}$) and are set such that they are centred and scaled using a $student\ t$ distribution with $df=3$ and represent the expected response value when all predictors are at their means, all group level terms are  set with a $student\ t$ distribution with $df=3$, a $\mu=0$, and scaled to the expected response values, and all correlation matrices $\text{R}$ are set with an $LKJcorr \left(1 \right)$ distribution. The remaining population effect coefficients are by default set with an improper flat prior on the reals (i.e., $uniform(lb=-\infty,ub=\infty)$) and thus we opted to set our own informative weakly regularising priors based on the raw data descriptives. Typically a 10% coefficient of variation is deemed acceptable for strength measures test-retest variation [@nuzzoCORPMeasurementUpper2019] and so we opted for a slightly more skeptical prior with a location set at 20% of the sample arithmetic mean of all observations for each exercise outcome. Further, we assumed a simple propagation of error approach for two independent measurements (i.e., ignoring covariance and thus reflecting a lack of knowledge about the exact nature of it) again utilising the sample variance of all observations for each exercise outcome. Thus, the priors for the model in #eq-isometric-model were: 
+
+$$
+\begin{aligned}
+\begin{aligned}
+ \beta^\text{Chest Press}_{1}\text{Day}_{1} \\ 
+ \beta^\text{Chest Press}_{2}\text{Day}_{2} \\
+ \end{aligned}
+ & \sim 
+ student\ t 
+ \left(
+ df=3,
+ \mu=
+ 0.2\left( \frac{1}{n} \sum_{ijk=ijk}^{n} \text{Chest Press}_{ijk} \right),
+ \sigma= 2\sqrt{\frac{1}{N-1} \sum_{ijk=1}^N (\text{Chest Press}_{ijk} - \overline{\text{Chest Press}})^2}
+ \right) \\
+ \begin{aligned}
+ \beta^\text{Leg Press}_{1}\text{Day}_{1} \\ 
+ \beta^\text{Leg Press}_{2}\text{Day}_{2} \\
+ \end{aligned}
+ & \sim 
+ student\ t 
+ \left(
+ df=3,
+ \mu=
+ 0.2\left( \frac{1}{n} \sum_{ijk=ijk}^{n} \text{Leg Press}_{ijk} \right),
+ \sigma= 2\sqrt{\frac{1}{N-1} \sum_{ijk=1}^N (\text{Leg Press}_{ijk} - \overline{\text{Leg Press}})^2}
+ \right) \\
+ \begin{aligned}
+ \beta^\text{Row }_{1}\text{Day}_{1} \\ 
+ \beta^\text{Row }_{2}\text{Day}_{2} \\
+ \end{aligned}
+ & \sim 
+ student\ t 
+ \left(
+ df=3,
+ \mu=
+ 0.2\left( \frac{1}{n} \sum_{ijk=ijk}^{n} \text{Row}_{ijk} \right),
+ \sigma= 2\sqrt{\frac{1}{N-1} \sum_{ijk=1}^N (\text{Row}_{ijk} - \overline{\text{Row}})^2}
+  \right)
+\end{aligned}
+$$

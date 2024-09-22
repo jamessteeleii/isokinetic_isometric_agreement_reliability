@@ -78,8 +78,23 @@ fit_isometric_model <- function(isometric_data) {
   isometric_lp_bf <- bf(lp ~ 1 + day + (1|a|participant) + (1|b|participant:day))
   isometric_row_bf <- bf(row ~ 1 + day + (1|a|participant) + (1|b|participant:day))
   
+  mean_cp <- mean(isometric_data_wide$cp)
+  mean_lp <- mean(isometric_data_wide$lp)
+  mean_row <- mean(isometric_data_wide$row)
+  
+  sd_cp <- sd(isometric_data_wide$cp)
+  sd_lp <- sd(isometric_data_wide$lp)
+  sd_row <- sd(isometric_data_wide$row)
+  
+  prior <- c(
+    set_prior(paste("student_t(3,", mean_cp*0.2,",", sqrt(2*sd_cp^2),")"), class = "b", resp = "cp"),
+    set_prior(paste("student_t(3,", mean_lp*0.2,",", sqrt(2*sd_lp^2),")"), class = "b", resp = "lp"),
+    set_prior(paste("student_t(3,", mean_row*0.2,",", sqrt(2*sd_row^2),")"), class = "b", resp = "row")
+  )
+  
   brm_model_isometric <- brm(isometric_cp_bf + isometric_lp_bf + isometric_row_bf + set_rescor(TRUE),
                              data = isometric_data_wide,
+                             prior = prior,
                              chains = 4,
                              cores = 4,
                              seed = 1988,
@@ -128,7 +143,7 @@ get_isometric_bias_summary <- function(isometric_draws) {
     separate(coef, into = c("coef", "exercise", "day")) |>
     unite("coef", c("coef","day"), sep = "_") |>
     mutate(coef = case_when(
-      coef == "b_day1" ~ "Day 1 to Day 2",
+      coef == "b_day1" ~ "Day 1 to Day 2/3",
       coef == "b_day2" ~ "Day 2 to Day 3"
     ),
     exercise = case_when(
@@ -166,7 +181,7 @@ plot_isometric_bias <- function(isometric_draws, isometric_bias_summary) {
     separate(coef, into = c("coef", "exercise", "day")) |>
     unite("coef", c("coef","day"), sep = "_") |>
     mutate(coef = case_when(
-      coef == "b_day1" ~ "Day 1 to Day 2",
+      coef == "b_day1" ~ "Day 1 to Day 2/3",
       coef == "b_day2" ~ "Day 2 to Day 3"
     ),
     exercise = case_when(

@@ -16,7 +16,8 @@ tar_option_set(
     "patchwork",
     "rstan",
     "brms",
-    "tidybayes"
+    "tidybayes",
+    "grateful"
   ) # Packages that your targets need for their tasks.
   
   # format = "qs", # Optionally set the default storage format. qs is fast.
@@ -83,7 +84,12 @@ list(
   tar_target(isokinetic_draws, get_isokinetic_draws(isokinetic_model)),
   tar_target(isokinetic_bias_loa_summary, get_isokinetic_bias_loa_summary(isokinetic_draws, isokinetic_data)),
   tar_target(isokinetic_BA_plot, plot_isokinetic_BA(isokinetic_bias_loa_summary, isokinetic_data)),
-  tar_target(isokinetic_BA_plot_tiff, make_plot_tiff(isokinetic_BA_plot, 10, 6.66, "plots/isokinetic_BA_plot.tiff"))
+  tar_target(isokinetic_BA_plot_tiff, make_plot_tiff(isokinetic_BA_plot, 10, 6.66, "plots/isokinetic_BA_plot.tiff")),
+  
+  # Reporting
+  tar_target(grateful_report, cite_packages(out.dir = ".", cite.tidyverse = TRUE, out.format = "pdf"))
+  # tar_quarto(wolf_priors_model_diagnostic_plots, path = "plots/wolf_priors_model_diagnostic_plots.qmd"),
+  # tar_quarto(analysis_results, path = "analysis_results.qmd")
   
   )
 
