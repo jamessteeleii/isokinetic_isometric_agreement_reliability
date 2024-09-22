@@ -1,4 +1,4 @@
-# Within- and between-day test-retest reliability of isometric and isokinetic, multi-joint, upper- and lower-body strength testing
+# Within- and between-day test-retest agreement of isometric and isokinetic, multi-joint, upper- and lower-body strength testing
 
 ## Abstract
   TO COMPLETE
