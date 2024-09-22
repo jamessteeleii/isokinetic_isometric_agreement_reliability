@@ -6,7 +6,7 @@ format:
     number-sections: true
     highlight-style: github
     # prefer-html: true
-bibliography: 
+bibliography:
   references.bib
 csl: apa.csl
 ---
@@ -35,7 +35,6 @@ Given that for isometric outcomes we had both three repeated days of testing, an
 In the present case we sought to partition the variance components such that we could determine separately the between-participant variance (i.e., $\alpha_{0i}$ below), the between-day variance (i.e.,  $\alpha_{1ij}$ below), and the residual variance which here reflects the within-day variance (i.e., $\alpha_{\mu_{ij}}$ below). We estimate these variance components through a multivariate mixed effects model of the joint three exercise outcomes observed (chest press, leg press, and row; see #eq-isometric-model). The model included a population (i.e., fixed) effect for day which was Helmert coded; This meant that for the three days we have two coefficients in the model for each outcome with the first, $\beta_{1}\text{Day}$ below, reflecting the difference between the mean of day one and the mean of day two and three, and the second, $\beta_{2}\text{Day}$ below, reflected the difference between mean of day two and the mean of day three. This allowed us to examine whether there was any systematic bias, and in this case the Helmert coding was specifically used because we anticipated that any bias would manifest in terms of a "familiarisation" effect whereby participants improved systematically with repeated measurement. The model also included random (i.e., group level terms) intercepts for participants (i.e., $\alpha_{0i}$ below), and random intercepts for day nested within participant (i.e., $\alpha_{1ij}$ below). Each of these were modelled as correlated between outcomes reflecting the models assumption that typically participants that are stronger are stronger across each exercise tested (i.e., strength is correlated between exercises), and also that variation across days was likely to also be related reflecting that lower/higher values on a given exercise on one day would likely be related to lower/higher values on a different exercise on that day. Lastly, the residual errors were also modelled as correlated. The model for isometric measurements can thus be represented as follows in #eq-isometric-model:
 
 $$
-\begin{equation}
 \begin{aligned}
 \left[
   \begin{array}{c} 
@@ -134,7 +133,6 @@ $$
   \end{array}
 \right)
 \end{aligned}
-\end{equation}
 $$ {#eq-isometric-model}
 
 where each exercise outcome is represented by a superscript for observations and model parameters (i.e., $\text{Chest Press}, \text{Leg Press}, or\ \text{Row}$), and for a given exercise the subscripts reflect the $k$th measurement ($\text{k = 1,} \dots \text{,K}$), from the $j$th day ($\text{j = 1,} \dots \text{,J}$) for the $i$th participant ($\text{i = 1,} \dots \text{,I}$). Population and group (i.e., fixed and random) parameters are described above. The covariance matrices for observations, random intercepts for participant, and random intercepts for day within participant are given by $\Sigma_{Obs}$, $\Sigma_{Obs}$, $\Sigma_{Obs}$.

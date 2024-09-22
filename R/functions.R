@@ -82,14 +82,14 @@ fit_isometric_model <- function(isometric_data) {
   mean_lp <- mean(isometric_data_wide$lp)
   mean_row <- mean(isometric_data_wide$row)
   
-  sd_cp <- sd(isometric_data_wide$cp)
-  sd_lp <- sd(isometric_data_wide$lp)
-  sd_row <- sd(isometric_data_wide$row)
+  var_cp <- var(isometric_data_wide$cp)
+  var_lp <- var(isometric_data_wide$lp)
+  var_row <- var(isometric_data_wide$row)
   
   prior <- c(
-    set_prior(paste("student_t(3,", mean_cp*0.2,",", sqrt(2*sd_cp^2),")"), class = "b", resp = "cp"),
-    set_prior(paste("student_t(3,", mean_lp*0.2,",", sqrt(2*sd_lp^2),")"), class = "b", resp = "lp"),
-    set_prior(paste("student_t(3,", mean_row*0.2,",", sqrt(2*sd_row^2),")"), class = "b", resp = "row")
+    set_prior(paste("student_t(3,", mean_cp*0.2,",", sqrt(2*var_cp^2),")"), class = "b", resp = "cp"),
+    set_prior(paste("student_t(3,", mean_lp*0.2,",", sqrt(2*var_lp^2),")"), class = "b", resp = "lp"),
+    set_prior(paste("student_t(3,", mean_row*0.2,",", sqrt(2*var_row^2),")"), class = "b", resp = "row")
   )
   
   brm_model_isometric <- brm(isometric_cp_bf + isometric_lp_bf + isometric_row_bf + set_rescor(TRUE),
