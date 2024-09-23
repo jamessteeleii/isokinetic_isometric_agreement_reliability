@@ -18,7 +18,9 @@ tar_option_set(
     "brms",
     "tidybayes",
     "bayesplot",
-    "grateful"
+    "grateful",
+    "quarto",
+    "cli"
   ) # Packages that your targets need for their tasks.
   
   # format = "qs", # Optionally set the default storage format. qs is fast.
@@ -102,7 +104,8 @@ list(
   
   # Reporting
   tar_target(grateful_report, cite_packages(out.dir = ".", cite.tidyverse = TRUE, out.format = "pdf"))
-  # tar_quarto(wolf_priors_model_diagnostic_plots, path = "plots/wolf_priors_model_diagnostic_plots.qmd"),
+  # tar_quarto(isometric_model_diagnostics, path = "plots/isometric_model_diagnostics.qmd"),
+  # tar_quarto(isokinetic_model_diagnostics, path = "plots/isokinetic_model_diagnostics.qmd")
   # tar_quarto(analysis_results, path = "analysis_results.qmd")
   
   )

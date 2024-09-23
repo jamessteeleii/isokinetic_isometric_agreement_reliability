@@ -1,4 +1,5 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+.Random.seed|object|a3aa1093f942b567|||||||||||||||
 combined_isometric_plot|stem|fe37d84e3b4eb7b5|6e792700e56a9861|743fc172782b5634|2044976524||t19988.6962787012s|854547f2f6314466|8324976|rds|local|vector|||0||
 data|stem|2ff46fa6d63ad378|bf6275f653d53dd4|b9952bd51cccea52|33550471||t19984.5934224582s|d1ec28f89e6eaddb|3785|rds|local|vector|||0.72||
 file|stem|c20bcd8480d8f847|ee6cebdffc9a61e4|2c530c1562a7fbd1|1735323524|C:/Users/james/Dropbox/Research/Exercise Coach/isokinetic_isometric_agreement_reliability/data/data.csv|t19979.6883428076s|16d04af8c751579f|5748|file|local|vector|||6.05||
@@ -31,6 +32,7 @@ isometric_draws|stem|4a363ed23d778b64|e75eb339839d57f7|72dfd43fc7074645|-1456788
 isometric_loamr_plot|stem|0bc0c03fc40a0149|f4b63a9a62d83da7|88b1067cefbf5761|-107861230||t19988.6962427772s|251f8063627fac9e|352151|rds|local|vector|||0.17||
 isometric_loamr_summary|stem|fb171ad2358de553|5d77712d8f594d9f|3ba6076c37f18a8f|1199122691||t19988.6962216907s|fe946fd0b87ee8a2|987|rds|local|vector|||0.11|Detected an unexpected manytomany relationship between x and y.ℹ Row 1 of x matches multiple rows in y.ℹ Row 1 of y matches multiple rows in x.ℹ If a manytomany relationship is expected, set relationship   manytomany to silence this warning.|
 isometric_model|stem|03d9658268216705|ec65a99abf8923c4|816d79797cd53d6c|1609790368||t19988.6962069069s|0c3d4e895c9a2bf0|189990989|rds|local|vector|||347.89|There were 4 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. Seehttpsmcstan.orgmiscwarnings.htmlmaximumtreedepthexceeded. Examine the pairs plot to diagnose sampling problems|
+isometric_model_diagnostics|stem||5dbe473a1f7e6c98|99d4ccace5a5e573|84879657||t19989.4177672866s||0|file|local|vector|||23.36||Error running quarto cli.ℹ Rerun with quiet  FALSE to see the full error message.Caused by error System command quarto.exe failed
 isometric_model_pp_check|stem||e5240c4e2ba1a68c|0b9c0956a8b6f0f3|-1819716569||t19989.3589716005s||0|rds|local|vector|||0.18||Argument resp must be a single variable name when applying this method to a multivariate model.
 isometric_model_pp_check_cp|stem|4448c7aabb5336ec|e703943c11bbf494|836bd75ad436d253|549823534||t19989.3623642758s|b9a8378910de635b|147298|rds|local|vector|||1.55||
 isometric_model_pp_check_lp|stem|ad1830827b760869|cd846b29968127f2|836bd75ad436d253|1159262212||t19989.3623457746s|b3046d2d0a44cc76|147459|rds|local|vector|||2.13||

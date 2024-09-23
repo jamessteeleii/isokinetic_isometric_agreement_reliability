@@ -27,12 +27,13 @@ library(patchwork)
 
 # Statistical Analysis
 
-All code utilised for data preparation and analyses are available in either the Open Science Framework page for this project <https://osf.io/zrxjp/> or the corresponding GitHub repository <https://github.com/jamessteeleii/isokinetic_isometric_agreement_reliability>. We cite all software and packages used in the analysis pipeline using the `grateful` package [@rodriguez-sanchezGratefulFacilitateCitation2023] which can be seen here: <https://osf.io/pgx6v>. This project was not pre-registered, but had an exploratory estimation goal. All analyses have been conducted within a Bayesian posterior estimation framework and all posterior estimates and their precision, along with conclusions based upon them, will be interpreted continuously and probabilistically, considering priors, data quality, and all within the context of each outcome and the assumptions of the model employed as the estimator [@kruschkeBayesianNewStatistics2018]. Given that most utilisation of strength measurement is for the purpose of determining whether a change has occurred from test-to-test, we focused on the *agreement* of measurements as opposed to the typical *reliability* statistics which instead reflect the ability of measurements to distinguish between individuals [@vetWhenUseAgreement2006a; @kottnerDifferenceReliabilityAgreement2011; @berchtoldTestRetestAgreement2016]. Here we also employed multivariate mixed effects methods for examining agreement by variance components enabling us to model all three exercises, chest press, leg press, and row, simultaneously extending previous approaches [@schluterMultivariateHierarchicalBayesian2009] thus offering greater precision, robustness, and efficiency of estimates. Two sets of models, each detailed below, were used to examine both the between- and within-day agreement for isometric outcomes, and for between-day agreement for isokinetic outcomes. In each model we employed informative yet weakly regularising priors which are detailed below. Trace plots were produced along with $\hat{R}$ values to examine whether chains had converged, and posterior predictive checks for each model were also examined to understand the model implied distributions.
+All code utilised for data preparation and analyses are available in either the Open Science Framework page for this project <https://osf.io/zrxjp/> or the corresponding GitHub repository <https://github.com/jamessteeleii/isokinetic_isometric_agreement_reliability>. We cite all software and packages used in the analysis pipeline using the `grateful` package [@rodriguez-sanchezGratefulFacilitateCitation2023] which can be seen here: <https://osf.io/pgx6v>. This project was not pre-registered, but had an exploratory estimation goal. All analyses have been conducted within a Bayesian posterior estimation framework and all posterior estimates and their precision, along with conclusions based upon them, will be interpreted continuously and probabilistically, considering priors, data quality, and all within the context of each outcome and the assumptions of the model employed as the estimator [@kruschkeBayesianNewStatistics2018]. Given that most utilisation of strength measurement is for the purpose of determining whether a change has occurred from test-to-test, we focused on the *agreement* of measurements as opposed to the typical *reliability* statistics which instead reflect the ability of measurements to distinguish between individuals [@vetWhenUseAgreement2006a; @kottnerDifferenceReliabilityAgreement2011; @berchtoldTestRetestAgreement2016]. Here we also employed multivariate mixed effects methods for examining agreement by variance components enabling us to model all three exercises, chest press, leg press, and row, simultaneously extending previous approaches [@schluterMultivariateHierarchicalBayesian2009] thus offering greater precision, robustness, and efficiency of estimates. Two sets of models, each detailed below, were used to examine both the between- and within-day agreement for isometric outcomes, and for between-day agreement for isokinetic outcomes. In each model we employed informative yet weakly regularising priors which are detailed below. All models were fit with four Markov Chain Mote Carlo chains using 2000 warmup and 6000 sampling iterations. Trace plots were produced along with $\hat{R}$ values to examine whether chains had converged, and posterior predictive checks for each model were also examined to understand the model implied distributions. Note, all values are in Newtons of force.
 
 ## Isometric Outcomes
-Given that for isometric outcomes we had both three repeated days of testing, and two repeated trials within each day, we opted to adapt the methods described by Jones et al. [-@jonesGraphicalMethodAssessing2011] and Christensen et al. [-@christensenJonesAlsMethod2020] to derive the limits of agreement with the mean. Typically where there are two measurements to compare in terms of agreement the traditional Bland-Altman Limits of Agreement approach can be employed [@blandStatisticalMethodsAssessing1986a]. When there are multiple measurements (whether multiple methods, observers, or tests, or whether there are replicates within these) it is more difficult to apply these typical models. Instead, we can model the outcomes directly and derive the agreement with the *mean* value for the participant over the repeated measurements made. In the case where we can assume there is no bias for a particular measurement (in our case no particular bias across days for example), then we can assume that the mean reflects a good estimate of the true value and the 95% limits of agreement then reflect  the range over which we would expect measurements to fall about the true value 95% of the time. 
 
-In the present case we sought to partition the variance components such that we could determine separately the between-participant variance (i.e., $\alpha_{0i}$ below), the between-day variance (i.e.,  $\alpha_{1ij}$ below), and the residual variance which here reflects the within-day variance (i.e., $\alpha_{\mu_{ij}}$ below). We estimate these variance components through a multivariate mixed effects model of the joint three exercise outcomes observed (chest press, leg press, and row; see #eq-isometric-model). The model included a population (i.e., fixed) effect for day which was Helmert coded; This meant that for the three days we have two coefficients in the model for each outcome with the first, $\beta_{1}\text{Day}$ below, reflecting the difference between the mean of day one and the mean of day two and three, and the second, $\beta_{2}\text{Day}$ below, reflected the difference between mean of day two and the mean of day three. This allowed us to examine whether there was any systematic bias, and in this case the Helmert coding was specifically used because we anticipated that any bias would manifest in terms of a "familiarisation" effect whereby participants improved systematically with repeated measurement. The model also included random (i.e., group level terms) intercepts for participants (i.e., $\alpha_{0i}$ below), and random intercepts for day nested within participant (i.e., $\alpha_{1ij}$ below). Each of these were modelled as correlated between outcomes reflecting the models assumption that typically participants that are stronger are stronger across each exercise tested (i.e., strength is correlated between exercises), and also that variation across days was likely to also be related reflecting that lower/higher values on a given exercise on one day would likely be related to lower/higher values on a different exercise on that day. Lastly, the residual errors were also modelled as correlated. The model for isometric measurements can thus be represented as follows in #eq-isometric-model:
+Given that for isometric outcomes we had both three repeated days of testing, and two repeated trials within each day, we opted to adapt the methods described by Jones et al. [-@jonesGraphicalMethodAssessing2011] and Christensen et al. [-@christensenJonesAlsMethod2020] to derive the limits of agreement with the mean. Typically where there are two measurements to compare in terms of agreement the traditional Bland-Altman Limits of Agreement approach can be employed [@blandStatisticalMethodsAssessing1986a]. When there are multiple measurements (whether multiple methods, observers, or tests, or whether there are replicates within these) it is more difficult to apply these typical models. Instead, we can model the outcomes directly and derive the agreement with the *mean* value for the participant over the repeated measurements made. In the case where we can assume there is no bias for a particular measurement (in our case no particular bias across days for example), then we can assume that the mean reflects a good estimate of the true value and the 95% limits of agreement then reflect the range over which we would expect measurements to fall about the true value 95% of the time.
+
+In the present case we sought to partition the variance components such that we could determine separately the between-participant variance (i.e., $\alpha_{0i}$ below), the between-day variance (i.e., $\alpha_{1ij}$ below), and the residual variance which here reflects the within-day variance (i.e., $\alpha_{\mu_{ij}}$ below). We estimate these variance components through a multivariate mixed effects model of the joint three exercise outcomes observed (chest press, leg press, and row; see @eq-isometric-model). The model included a population (i.e., fixed) effect for day which was Helmert coded; This meant that for the three days we have two coefficients in the model for each outcome with the first, $\beta_{1}\text{Day}$ below, reflecting the difference between the mean of day one and the mean of day two and three, and the second, $\beta_{2}\text{Day}$ below, reflected the difference between mean of day two and the mean of day three. This allowed us to examine whether there was any systematic bias, and in this case the Helmert coding was specifically used because we anticipated that any bias would manifest in terms of a "familiarisation" effect whereby participants improved systematically with repeated measurement. The model also included random (i.e., group level terms) intercepts for participants (i.e., $\alpha_{0i}$ below), and random intercepts for day nested within participant (i.e., $\alpha_{1ij}$ below). Each of these were modelled as correlated between outcomes reflecting the models assumption that typically participants that are stronger are stronger across each exercise tested (i.e., strength is correlated between exercises), and also that variation across days was likely to also be related reflecting that lower/higher values on a given exercise on one day would likely be related to lower/higher values on a different exercise on that day. Lastly, the residual errors were also modelled as correlated. The model for isometric measurements can thus be represented as follows in @eq-isometric-model:
 
 $$
 \begin{aligned}
@@ -135,9 +136,9 @@ $$
 \end{aligned}
 $$ {#eq-isometric-model}
 
-where each exercise outcome is represented by a superscript for observations and model parameters (i.e., $\text{Chest Press}, \text{Leg Press}, or\ \text{Row}$), and for a given exercise the subscripts reflect the $k$th measurement ($\text{k = 1,} \dots \text{,K}$), from the $j$th day ($\text{j = 1,} \dots \text{,J}$) for the $i$th participant ($\text{i = 1,} \dots \text{,I}$). Population and group (i.e., fixed and random) parameters are described above. The covariance matrices for observations, random intercepts for participant, and random intercepts for day within participant are given by $\Sigma_{Obs}$, $\Sigma_{Obs}$, $\Sigma_{Obs}$.
+where each exercise outcome is represented by a superscript for observations and model parameters (i.e., $\text{Chest Press}, \text{Leg Press}, or\ \text{Row}$), and for a given exercise the subscripts reflect the $k$th measurement ($\text{k = 1,} \dots \text{,K}$), from the $j$th day ($\text{j = 1,} \dots \text{,J}$) for the $i$th participant ($\text{i = 1,} \dots \text{,I}$). Population and group (i.e., fixed and random) parameters are described above. The covariance matrices for observations, random intercepts for participant, and random intercepts for day within participant are given by $\Sigma_{Obs}$, $\Sigma_{Participant}$, $\Sigma_{Participant:Day}$.
 
-As mentioned above we adopted informative yet weakly regularising priors. Default priors in the `brms` R package used to fit the model are weakly regularising on all intercept terms (i.e., $\beta_{0}$) and are set such that they are centred and scaled using a $student\ t$ distribution with $df=3$ and represent the expected response value when all predictors are at their means, all group level terms are  set with a $student\ t$ distribution with $df=3$, a $\mu=0$, and scaled to the expected response values, and all correlation matrices $\text{R}$ are set with an $LKJcorr \left(1 \right)$ distribution. The remaining population effect coefficients are by default set with an improper flat prior on the reals (i.e., $uniform(lb=-\infty,ub=\infty)$) and thus we opted to set our own informative weakly regularising priors based on the raw data descriptives. Typically a 10% coefficient of variation is deemed acceptable for strength measures test-retest variation [@nuzzoCORPMeasurementUpper2019] and so we opted for a slightly more skeptical prior with a location set at 20% of the sample arithmetic mean of all observations for each exercise outcome. Further, we assumed a simple propagation of error approach for two independent measurements (i.e., ignoring covariance and thus reflecting a lack of knowledge about the exact nature of it) again utilising the sample variance of all observations for each exercise outcome. Thus, the priors for the model in #eq-isometric-model were: 
+As mentioned above we adopted informative yet weakly regularising priors. Default priors in the `brms` R package used to fit the model are weakly regularising on all intercept terms (i.e., $\beta_{0}$) and are set such that they are centred and scaled using a $student\ t$ distribution with $df=3$ and represent the expected response value when all predictors are at their means, all group level terms are set with a $student\ t$ distribution with $df=3$, a $\mu=0$, and scaled to the expected response values, and all correlation matrices $\text{R}$ are set with an $LKJcorr \left(1 \right)$ distribution. The remaining population effect coefficients are by default set with an improper flat prior on the reals (i.e., $uniform(lb=-\infty,ub=\infty)$) and thus we opted to set our own informative weakly regularising priors based on the raw data descriptives. Typically a 10% coefficient of variation is deemed acceptable for strength measures test-retest variation [@nuzzoCORPMeasurementUpper2019] and so we opted for a slightly more skeptical prior with a location set at 20% of the sample arithmetic mean of all observations for each exercise outcome. Further, we assumed a simple propagation of error approach for two independent measurements (i.e., ignoring covariance and thus reflecting a lack of knowledge about the exact nature of it) again utilising the sample variance of all observations for each exercise outcome. Thus, the priors for the model in @eq-isometric-model were:
 
 $$
 \begin{aligned}
@@ -192,9 +193,10 @@ $$
 \pm1.96\sqrt{\frac{JK-1}{JK}\alpha_{\mu_{ij}}^2}
 $$ {#eq-within-day}
 
-For each posterior draw the limits of agreement with the mean were calculated and then the mean and 95% quantile intervals determined. These were then presented graphically with a limits of agreement with the mean plot following the methods described by Jones et al. [-@jonesGraphicalMethodAssessing2011] and Christensen et al. [-@christensenJonesAlsMethod2020] where the participant mean for each exercise outcome, $\overline{\text{y}}_{i..}$, was plot on the x-axis and the difference between each observation for each exercise outcome with the mean, $y_{ijk}-\overline{\text{y}}_{i..}$, plot on the y-axis with the corresponding limits of agreement with the mean for both between- and within-day plot about these. We also present the posterior distribution for the bias reflected by the $\beta_{1}\text{Day}$ and $\beta_{2}\text{Day}$ coefficients along with their corresponding mean and 95% quantile interval.
+For each posterior draw the limits of agreement with the mean were calculated and then the mean and 95% quantile intervals (QI) determined. These were then presented graphically with a limits of agreement with the mean plot following the methods described by Jones et al. [-@jonesGraphicalMethodAssessing2011] and Christensen et al. [-@christensenJonesAlsMethod2020] where the participant mean for each exercise outcome, $\overline{\text{y}}_{i..}$, was plot on the x-axis and the difference between each observation for each exercise outcome with the mean, $y_{ijk}-\overline{\text{y}}_{i..}$, plot on the y-axis with the corresponding limits of agreement with the mean for both between- and within-day plot about these. We also present the posterior distribution for the bias reflected by the $\beta_{1}\text{Day}$ and $\beta_{2}\text{Day}$ coefficients along with their corresponding mean and 95% quantile interval.
 
 ## Isokinetic Outcomes
+
 For the isokinetic outcomes we only had two repeated days of testing, and for each day a single "best" repetition measured for each exercise outcome and for both concentric and eccentric phases. We opted to model the concentric and eccentric phases separately as we suspected, whilst they may be correlated, the between-day agreement might differ for either. As such, given we only had two measurements between days for each exercise outcome and muscle action a traditional Bland-Altman Limits of Agreement approach could be employed [@blandStatisticalMethodsAssessing1986a]. We did however still adopt a multivariate approach allowing for the residual errors were also modelled as correlated which in this case, given our model described below had no other predictors (i.e., they include an intercept only for each outcome) these are the correlations between the between-day differences in each outcome. Where $\delta_{i}$ for each exercise outcome in each muscle action is the difference between days for the $i$th participant ($\text{i = 1,} \dots \text{,I}$) i.e., $\delta_{i}=y_{i2}-y_{i1}$, the model is:
 
 $$
@@ -222,33 +224,93 @@ $$
       &\mu^\text{Row (ecc)}_{i} 
     \end{aligned}
   \end{array}
-\right], 
-\Sigma_{obs}^*
-\right) \\
-\Sigma_{Obs}^* =
-\left(
-  \begin{array}{ccc}
-     \sigma_{\mu^\text{Chest Press (con)}_{i}} & 0 & 0 & 0 & 0 & 0 \\ 
-     0 & \sigma_{\mu^\text{Leg Press (con)}_{i}} & 0 & 0 & 0 & 0 \\ 
-     0 & 0 & \sigma_{\mu^\text{Row (con)}_{i}} & 0 & 0 & 0 \\
-     0 & 0 & 0 & \sigma_{\mu^\text{Chest Press (ecc)}_{i}} & 0 & 0  \\ 
-     0 & 0 & 0 & 0 & \sigma_{\mu^\text{Leg Press (ecc)}_{i}} & 0 \\ 
-     0 & 0 & 0 & 0 & 0 &  \sigma_{\mu^\text{Row (ecc)}_{i}} \\
-  \end{array}
+\right],
+\Sigma^*_{obs}
 \right) 
-\text{R}
-\left(
-  \begin{array}{ccc}
-     \sigma_{\mu^\text{Chest Press (con)}_{i}} & 0 & 0 & 0 & 0 & 0 \\ 
-     0 & \sigma_{\mu^\text{Leg Press (con)}_{i}} & 0 & 0 & 0 & 0 \\ 
-     0 & 0 & \sigma_{\mu^\text{Row (con)}_{i}} & 0 & 0 & 0 \\
-     0 & 0 & 0 & \sigma_{\mu^\text{Chest Press (ecc)}_{i}} & 0 & 0  \\ 
-     0 & 0 & 0 & 0 & \sigma_{\mu^\text{Leg Press (ecc)}_{i}} & 0 \\ 
-     0 & 0 & 0 & 0 & 0 &  \sigma_{\mu^\text{Row (ecc)}_{i}} \\
-  \end{array}
-\right)
 $$ {#eq-isokinetic-model}
+
+where $\Sigma^*_{Obs}$ is the residual covariance matrix (omitted due to size).
 
 Weakly regularising default priors were used again on all intercept terms (i.e., $\mu_{i}$) for each outcome and set such that they were centred and scaled using a $student\ t$ distribution with $df=3$ representing the expected response value when all predictors are at their means which in this case meant the raw means. The residual correlation matrix $\text{R}$ was set with an $LKJcorr \left(1 \right)$ distribution.
 
-In this model the 95% limits of agreement are calculated simply as $\pm1.96\times\sigma_{\mu i}$ for each outcome. Again this was calculated for each outcome for each posterior draw and the mean and 95% quantile intervals calculated. The bias for each outcome then are the intercept terms $\mu_{i}$ and the corresponding means and 95% quantile intervals for these were also determined. These were plot together in a traditional Bland-Altman limits of agreement plot where the participant mean for each exercise outcome, $\overline{\text{y}}_{i}$, was plot on the x-axis and the difference between days for each exercise outcome, $\delta{i}$, plot on the y-axis with the corresponding limits of agreement and mean bias plot about thes.
+In this model the 95% limits of agreement are calculated simply as $\pm1.96\times\sigma_{\mu i}$ for each outcome. Again this was calculated for each outcome for each posterior draw and the mean and 95% quantile intervals calculated. The bias for each outcome then are the intercept terms $\mu_{i}$ and the corresponding means and 95% quantile intervals for these were also determined. These were plot together in a traditional Bland-Altman limits of agreement plot where the participant mean for each exercise outcome, $\overline{\text{y}}_{i}$, was plot on the x-axis and the difference between days for each exercise outcome, $\delta{i}$, plot on the y-axis with the corresponding limits of agreement and mean bias plot about these.
+
+# Results
+## Isometric Outcomes
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+
+targets::tar_load(isometric_model)
+targets::tar_load(isometric_bias_summary)
+targets::tar_load(isometric_loamr_summary)
+
+isometric_loamr_summary_bw <- isometric_loamr_summary |>
+  filter(bw_w == "bw") |>
+  group_by(exercise) |>
+  slice_head(n=1)
+  
+  isometric_loamr_summary_w <- isometric_loamr_summary |>
+  filter(bw_w == "w") |>
+  group_by(exercise) |>
+  slice_head(n=1)
+
+```
+
+The isometric model showed chain convergence with $\hat{R}$ values all $<1.01$ and posterior predictive checks were good. Model diagnostics can be seen in the supplementary materials here: [https://osf.io/ypt59](https://osf.io/ypt59). 
+
+@fig-isometric-plot shows the mean bias and limits of agreement with the mean for both between- and within-day for each exercise. There was no clear evidence of a "familiarisation" biasing effect between days given that the sign of the contrasts both between- and within-exercises was variable and the posterior distributions typically all ranged from both small positive to negative effects. As might be expected, the between-day limits of agreement with the mean were greater than the within-day agreement. The between-day limits of agreement with the mean for the chest press were $\pm$ `r round(isometric_loamr_summary_bw$mean[1],2)` [95%QI: `r round(isometric_loamr_summary_bw$.lower[1],2)`, `r round(isometric_loamr_summary_bw$.upper[1],2)`], for the leg press were chest press were $\pm$ `r round(isometric_loamr_summary_bw$mean[2],2)` [95%QI: `r round(isometric_loamr_summary_bw$.lower[2],2)`, `r round(isometric_loamr_summary_bw$.upper[2],2)`], and for the row were chest press were $\pm$ `r round(isometric_loamr_summary_bw$mean[3],2)` [95%QI: `r round(isometric_loamr_summary_bw$.lower[3],2)`, `r round(isometric_loamr_summary_bw$.upper[3],2)`]. The within-day limits of agreement with the mean for the chest press were $\pm$ `r round(isometric_loamr_summary_w$mean[1],2)` [95%QI: `r round(isometric_loamr_summary_w$.lower[1],2)`, `r round(isometric_loamr_summary_w$.upper[1],2)`], for the leg press were chest press were $\pm$ `r round(isometric_loamr_summary_w$mean[2],2)` [95%QI: `r round(isometric_loamr_summary_w$.lower[2],2)`, `r round(isometric_loamr_summary_w$.upper[2],2)`], and for the row were chest press were $\pm$ `r round(isometric_loamr_summary_w$mean[3],2)` [95%QI: `r round(isometric_loamr_summary_w$.lower[3],2)`, `r round(isometric_loamr_summary_w$.upper[3],2)`].
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+#| label: fig-isometric-plot 
+#| fig-width: 10
+#| fig-height: 6.66
+#| fig-cap: Bias and limits of agreement with the mean for isometric outcomes for both between- and within-day.
+
+targets::tar_load(combined_isometric_plot)
+combined_isometric_plot
+```
+
+## Isokinetic Outcomes
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+
+targets::tar_load(isokinetic_model)
+targets::tar_load(isokinetic_bias_loa_summary)
+
+isokinetic_bias_loa_summary_con <- isokinetic_bias_loa_summary |>
+  filter(con_ecc == "Concentric") |>
+  group_by(exercise) |>
+  slice_head(n=1)
+  
+  isokinetic_bias_loa_summary_ecc <- isokinetic_bias_loa_summary |>
+  filter(con_ecc == "Eccentric") |>
+  group_by(exercise) |>
+  slice_head(n=1)
+
+```
+
+The isokinetic model also showed chain convergence with $\hat{R}$ values all $<1.01$ and posterior predictive checks were good. Model diagnostics can be seen in the supplementary materials here: [https://osf.io/wzh9m](https://osf.io/wzh9m). 
+
+@fig-isokinetic-plot shows the mean bias and limits of agreement between-day for each exercise and muscle action. There was no clear evidence of a "familiarisation" biasing effect between days for most exercises and muscle actions, perhaps with the exception of the eccentric leg press which showed somewhat of an improvement from day one to day two: `r round(isokinetic_bias_loa_summary_con$bias[2],2)` [95%QI: `r round(isokinetic_bias_loa_summary_con$bias.lower[2],2)`, `r round(isokinetic_bias_loa_summary_con$bias.upper[2],2)`]. The limits of agreement for concentric muscle actions for the chest press were $\pm$ `r round(isokinetic_bias_loa_summary_con$loa[1],2)` [95%QI: `r round(isokinetic_bias_loa_summary_con$loa.lower[1],2)`, `r round(isokinetic_bias_loa_summary_con$loa.upper[1],2)`], for the leg press were chest press were $\pm$ `r round(isokinetic_bias_loa_summary_con$loa[2],2)` [95%QI: `r round(isokinetic_bias_loa_summary_con$loa.lower[2],2)`, `r round(isokinetic_bias_loa_summary_con$loa.upper[2],2)`], and for the row were chest press were $\pm$ `r round(isokinetic_bias_loa_summary_con$loa[3],2)` [95%QI: `r round(isokinetic_bias_loa_summary_con$loa.lower[3],2)`, `r round(isokinetic_bias_loa_summary_con$loa.upper[3],2)`]. The limits of agreement for eccentric muscle actions for the chest press were $\pm$ `r round(isokinetic_bias_loa_summary_ecc$loa[1],2)` [95%QI: `r round(isokinetic_bias_loa_summary_ecc$loa.lower[1],2)`, `r round(isokinetic_bias_loa_summary_ecc$loa.upper[1],2)`], for the leg press were chest press were $\pm$ `r round(isokinetic_bias_loa_summary_ecc$loa[2],2)` [95%QI: `r round(isokinetic_bias_loa_summary_ecc$loa.lower[2],2)`, `r round(isokinetic_bias_loa_summary_ecc$loa.upper[2],2)`], and for the row were chest press were $\pm$ `r round(isokinetic_bias_loa_summary_ecc$loa[3],2)` [95%QI: `r round(isokinetic_bias_loa_summary_ecc$loa.lower[3],2)`, `r round(isokinetic_bias_loa_summary_ecc$loa.upper[3],2)`].
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+#| label: fig-isokinetic-plot 
+#| fig-width: 10
+#| fig-height: 6.66
+#| fig-cap: Between day bias and limits of agreement for isokinetic outcomes.
+
+targets::tar_load(isokinetic_BA_plot)
+isokinetic_BA_plot
+```
+
+# References
