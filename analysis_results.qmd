@@ -27,7 +27,7 @@ library(patchwork)
 
 # Statistical Analysis
 
-All code utilised for data preparation and analyses are available in either the Open Science Framework page for this project <https://osf.io/zrxjp/> or the corresponding GitHub repository <https://github.com/jamessteeleii/isokinetic_isometric_agreement_reliability>. We cite all software and packages used in the analysis pipeline using the `grateful` package [@rodriguez-sanchezGratefulFacilitateCitation2023] which can be seen here: <https://osf.io/pgx6v>. This project was not pre-registered, but had an exploratory estimation goal. All analyses have been conducted within a Bayesian posterior estimation framework and all posterior estimates and their precision, along with conclusions based upon them, will be interpreted continuously and probabilistically, considering priors, data quality, and all within the context of each outcome and the assumptions of the model employed as the estimator [@kruschkeBayesianNewStatistics2018]. Given that most utilisation of strength measurement is for the purpose of determining whether a change has occurred from test-to-test, we focused on the *agreement* of measurements as opposed to the typical *reliability* statistics which instead reflect the ability of measurements to distinguish between individuals [@vetWhenUseAgreement2006a; kottnerDifferenceReliabilityAgreement2011; berchtoldTestRetestAgreement2016]. Here we also employed multivariate mixed effects methods for examining agreement by variance components enabling us to model all three exercises, chest press, leg press, and row, simultaneously extending previous approaches [@schluterMultivariateHierarchicalBayesian2009] thus offering greater precision, robustness, and efficiency of estimates. Two sets of models, each detailed below, were used to examine both the between- and within-day agreement for isometric outcomes, and for between-day agreement for isokinetic outcomes. In each model we employed informative yet weakly regularising priors which are detailed below. Trace plots were produced along with $\hat{R}$ values to examine whether chains had converged, and posterior predictive checks for each model were also examined to understand the model implied distributions.
+All code utilised for data preparation and analyses are available in either the Open Science Framework page for this project <https://osf.io/zrxjp/> or the corresponding GitHub repository <https://github.com/jamessteeleii/isokinetic_isometric_agreement_reliability>. We cite all software and packages used in the analysis pipeline using the `grateful` package [@rodriguez-sanchezGratefulFacilitateCitation2023] which can be seen here: <https://osf.io/pgx6v>. This project was not pre-registered, but had an exploratory estimation goal. All analyses have been conducted within a Bayesian posterior estimation framework and all posterior estimates and their precision, along with conclusions based upon them, will be interpreted continuously and probabilistically, considering priors, data quality, and all within the context of each outcome and the assumptions of the model employed as the estimator [@kruschkeBayesianNewStatistics2018]. Given that most utilisation of strength measurement is for the purpose of determining whether a change has occurred from test-to-test, we focused on the *agreement* of measurements as opposed to the typical *reliability* statistics which instead reflect the ability of measurements to distinguish between individuals [@vetWhenUseAgreement2006a; @kottnerDifferenceReliabilityAgreement2011; @berchtoldTestRetestAgreement2016]. Here we also employed multivariate mixed effects methods for examining agreement by variance components enabling us to model all three exercises, chest press, leg press, and row, simultaneously extending previous approaches [@schluterMultivariateHierarchicalBayesian2009] thus offering greater precision, robustness, and efficiency of estimates. Two sets of models, each detailed below, were used to examine both the between- and within-day agreement for isometric outcomes, and for between-day agreement for isokinetic outcomes. In each model we employed informative yet weakly regularising priors which are detailed below. Trace plots were produced along with $\hat{R}$ values to examine whether chains had converged, and posterior predictive checks for each model were also examined to understand the model implied distributions.
 
 ## Isometric Outcomes
 Given that for isometric outcomes we had both three repeated days of testing, and two repeated trials within each day, we opted to adapt the methods described by Jones et al. [-@jonesGraphicalMethodAssessing2011] and Christensen et al. [-@christensenJonesAlsMethod2020] to derive the limits of agreement with the mean. Typically where there are two measurements to compare in terms of agreement the traditional Bland-Altman Limits of Agreement approach can be employed [@blandStatisticalMethodsAssessing1986a]. When there are multiple measurements (whether multiple methods, observers, or tests, or whether there are replicates within these) it is more difficult to apply these typical models. Instead, we can model the outcomes directly and derive the agreement with the *mean* value for the participant over the repeated measurements made. In the case where we can assume there is no bias for a particular measurement (in our case no particular bias across days for example), then we can assume that the mean reflects a good estimate of the true value and the 95% limits of agreement then reflect  the range over which we would expect measurements to fall about the true value 95% of the time. 
@@ -178,4 +178,77 @@ $$
  \sigma= 2\sqrt{\frac{1}{N-1} \sum_{ijk=1}^N (\text{Row}_{ijk} - \overline{\text{Row}})^2}
   \right)
 \end{aligned}
+$$ {#eq-isometric-prior}
+
+The between- and within-day 95% limits of agreement with the mean where calculated from the posterior draws of the relevant variance components. These were calculated adapting the approach of Christensen et al. [-@christensenJonesAlsMethod2020] adjusting for the degrees of freedom based upon the number of days, and number of replicates within days. The between-day limits of agreement with the mean were calculated using the between day variance component for each exercise outcome, $\alpha_{1ij}$, as:
+
 $$
+\pm1.96\sqrt{\frac{J-1}{J}\alpha_{1ij}^2}
+$$ {#eq-between-day}
+
+And the within-day limits of agreement with the mean utilising the remaining within day residual variance component for each exercise outcome, $\alpha_{\mu_{ij}}$, as:
+
+$$
+\pm1.96\sqrt{\frac{JK-1}{JK}\alpha_{\mu_{ij}}^2}
+$$ {#eq-within-day}
+
+For each posterior draw the limits of agreement with the mean were calculated and then the mean and 95% quantile intervals determined. These were then presented graphically with a limits of agreement with the mean plot following the methods described by Jones et al. [-@jonesGraphicalMethodAssessing2011] and Christensen et al. [-@christensenJonesAlsMethod2020] where the participant mean for each exercise outcome, $\overline{\text{y}}_{i..}$, was plot on the x-axis and the difference between each observation for each exercise outcome with the mean, $y_{ijk}-\overline{\text{y}}_{i..}$, plot on the y-axis with the corresponding limits of agreement with the mean for both between- and within-day plot about these. We also present the posterior distribution for the bias reflected by the $\beta_{1}\text{Day}$ and $\beta_{2}\text{Day}$ coefficients along with their corresponding mean and 95% quantile interval.
+
+## Isokinetic Outcomes
+For the isokinetic outcomes we only had two repeated days of testing, and for each day a single "best" repetition measured for each exercise outcome and for both concentric and eccentric phases. We opted to model the concentric and eccentric phases separately as we suspected, whilst they may be correlated, the between-day agreement might differ for either. As such, given we only had two measurements between days for each exercise outcome and muscle action a traditional Bland-Altman Limits of Agreement approach could be employed [@blandStatisticalMethodsAssessing1986a]. We did however still adopt a multivariate approach allowing for the residual errors were also modelled as correlated which in this case, given our model described below had no other predictors (i.e., they include an intercept only for each outcome) these are the correlations between the between-day differences in each outcome. Where $\delta_{i}$ for each exercise outcome in each muscle action is the difference between days for the $i$th participant ($\text{i = 1,} \dots \text{,I}$) i.e., $\delta_{i}=y_{i2}-y_{i1}$, the model is:
+
+$$
+\left[
+  \begin{array}{c} 
+    \begin{aligned}
+      &\delta^\text{Chest Press (con)}_{i} \\
+      &\delta^\text{Leg Press (con)}_{i} \\
+      &\delta^\text{Row (con)}_{i} \\
+      &\delta^\text{Chest Press (ecc)}_{i} \\
+      &\delta^\text{Leg Press (ecc)}_{i} \\
+      &\delta^\text{Row (ecc)}_{i} 
+    \end{aligned}
+  \end{array}
+  \right]
+    \sim MVN \left(
+\left[
+  \begin{array}{c} 
+    \begin{aligned}
+      &\mu^\text{Chest Press (con)}_{i} \\
+      &\mu^\text{Leg Press (con)}_{i} \\
+      &\mu^\text{Row (con)}_{i} \\
+      &\mu^\text{Chest Press (ecc)}_{i} \\
+      &\mu^\text{Leg Press (ecc)}_{i} \\
+      &\mu^\text{Row (ecc)}_{i} 
+    \end{aligned}
+  \end{array}
+\right], 
+\Sigma_{obs}^*
+\right) \\
+\Sigma_{Obs}^* =
+\left(
+  \begin{array}{ccc}
+     \sigma_{\mu^\text{Chest Press (con)}_{i}} & 0 & 0 & 0 & 0 & 0 \\ 
+     0 & \sigma_{\mu^\text{Leg Press (con)}_{i}} & 0 & 0 & 0 & 0 \\ 
+     0 & 0 & \sigma_{\mu^\text{Row (con)}_{i}} & 0 & 0 & 0 \\
+     0 & 0 & 0 & \sigma_{\mu^\text{Chest Press (ecc)}_{i}} & 0 & 0  \\ 
+     0 & 0 & 0 & 0 & \sigma_{\mu^\text{Leg Press (ecc)}_{i}} & 0 \\ 
+     0 & 0 & 0 & 0 & 0 &  \sigma_{\mu^\text{Row (ecc)}_{i}} \\
+  \end{array}
+\right) 
+\text{R}
+\left(
+  \begin{array}{ccc}
+     \sigma_{\mu^\text{Chest Press (con)}_{i}} & 0 & 0 & 0 & 0 & 0 \\ 
+     0 & \sigma_{\mu^\text{Leg Press (con)}_{i}} & 0 & 0 & 0 & 0 \\ 
+     0 & 0 & \sigma_{\mu^\text{Row (con)}_{i}} & 0 & 0 & 0 \\
+     0 & 0 & 0 & \sigma_{\mu^\text{Chest Press (ecc)}_{i}} & 0 & 0  \\ 
+     0 & 0 & 0 & 0 & \sigma_{\mu^\text{Leg Press (ecc)}_{i}} & 0 \\ 
+     0 & 0 & 0 & 0 & 0 &  \sigma_{\mu^\text{Row (ecc)}_{i}} \\
+  \end{array}
+\right)
+$$ {#eq-isokinetic-model}
+
+Weakly regularising default priors were used again on all intercept terms (i.e., $\mu_{i}$) for each outcome and set such that they were centred and scaled using a $student\ t$ distribution with $df=3$ representing the expected response value when all predictors are at their means which in this case meant the raw means. The residual correlation matrix $\text{R}$ was set with an $LKJcorr \left(1 \right)$ distribution.
+
+In this model the 95% limits of agreement are calculated simply as $\pm1.96\times\sigma_{\mu i}$ for each outcome. Again this was calculated for each outcome for each posterior draw and the mean and 95% quantile intervals calculated. The bias for each outcome then are the intercept terms $\mu_{i}$ and the corresponding means and 95% quantile intervals for these were also determined. These were plot together in a traditional Bland-Altman limits of agreement plot where the participant mean for each exercise outcome, $\overline{\text{y}}_{i}$, was plot on the x-axis and the difference between days for each exercise outcome, $\delta{i}$, plot on the y-axis with the corresponding limits of agreement and mean bias plot about thes.

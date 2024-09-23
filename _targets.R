@@ -17,6 +17,7 @@ tar_option_set(
     "rstan",
     "brms",
     "tidybayes",
+    "bayesplot",
     "grateful"
   ) # Packages that your targets need for their tasks.
   
@@ -69,6 +70,11 @@ list(
   
   # Fit and plot isometric model
   tar_target(isometric_model, fit_isometric_model(isometric_data)),
+  tar_target(isometric_model_rhat, make_rhat_plot(isometric_model)),
+  tar_target(isometric_model_trace, make_trace_plot(isometric_model)),
+  tar_target(isometric_model_pp_check_cp, make_pp_check(isometric_model, "cp")),
+  tar_target(isometric_model_pp_check_lp, make_pp_check(isometric_model, "lp")),
+  tar_target(isometric_model_pp_check_row, make_pp_check(isometric_model, "row")),
   tar_target(isometric_draws, get_isometric_draws(isometric_model, isometric_data)),
   tar_target(isometric_bias_summary, get_isometric_bias_summary(isometric_draws)),
   tar_target(isometric_loamr_summary, get_isometric_loamr_summary(isometric_data,isometric_draws)),
@@ -81,6 +87,14 @@ list(
   
   # Fit and plot isokinetic model
   tar_target(isokinetic_model, fit_isokinetic_model(isokinetic_data)),
+  tar_target(isokinetic_model_rhat, make_rhat_plot(isokinetic_model)),
+  tar_target(isokinetic_model_trace, make_trace_plot(isokinetic_model)),
+  tar_target(isokinetic_model_pp_check_cp_con, make_pp_check(isokinetic_model, "deltacpcon")),
+  tar_target(isokinetic_model_pp_check_lp_con, make_pp_check(isokinetic_model, "deltalpcon")),
+  tar_target(isokinetic_model_pp_check_row_con, make_pp_check(isokinetic_model, "deltarowcon")),
+  tar_target(isokinetic_model_pp_check_cp_ecc, make_pp_check(isokinetic_model, "deltacpecc")),
+  tar_target(isokinetic_model_pp_check_lp_ecc, make_pp_check(isokinetic_model, "deltalpecc")),
+  tar_target(isokinetic_model_pp_check_row_ecc, make_pp_check(isokinetic_model, "deltarowecc")),
   tar_target(isokinetic_draws, get_isokinetic_draws(isokinetic_model)),
   tar_target(isokinetic_bias_loa_summary, get_isokinetic_bias_loa_summary(isokinetic_draws, isokinetic_data)),
   tar_target(isokinetic_BA_plot, plot_isokinetic_BA(isokinetic_bias_loa_summary, isokinetic_data)),

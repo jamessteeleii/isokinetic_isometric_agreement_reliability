@@ -411,3 +411,25 @@ plot_isokinetic_BA <- function(isokinetic_bias_loa_summary, isokinetic_data) {
     theme_bw() +
     theme(plot.caption = element_text(size=6))
 }
+
+# Model checks
+make_rhat_plot <- function(model) {
+  mod_rhat <- enframe(brms::rhat(model)) |>
+    filter(!str_detect(name, "^r_id"))
+  
+  rhat_main_params <- mod_rhat$value
+  
+  mcmc_rhat(rhat_main_params) +
+    scale_x_continuous(breaks = c(1, 1.01, 1.02, 1.03, 1.04, 1.05)) +
+    geom_vline(xintercept = 1.01,
+               linetype = "dashed",
+               alpha = 0.25)
+}
+
+make_trace_plot <- function(model) {
+  plot(model)
+}
+
+make_pp_check <- function(model, resp) {
+  pp_check(model, resp = resp)
+}
