@@ -1,0 +1,91 @@
+---
+title: "Diagnostic Plots - Isometric Model"
+subtitle: "Within- and between-day test-retest agreement of isometric and isokinetic, multi-joint, upper- and lower-body strength testing"
+author: "Michael Nash, James Steele, James P. Fisher"
+format:
+  pdf:
+    documentclass: report
+    toc: false
+    number-sections: false
+    highlight-style: github
+    fig-width: 10
+    fig-height: 10
+---
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+#| include: false
+targets::tar_config_set(store = here::here('_targets'))
+```
+
+# Standardised Mean Difference Model
+
+## Pre-registered Main Model
+
+### $\hat{R}$
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+
+targets::tar_load(isometric_model_rhat)
+
+isometric_model_rhat 
+
+```
+
+### Trace plots
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+
+targets::tar_load(isometric_model_trace)
+
+isometric_model_trace
+
+```
+
+### Posterior predictive check
+
+#### Chest Press
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+
+targets::tar_load(isometric_model_pp_check_cp)
+
+isometric_model_pp_check_cp
+
+```
+
+#### Leg Press
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+
+targets::tar_load(isometric_model_pp_check_lp)
+
+isometric_model_pp_check_lp
+
+```
+
+#### Row
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+
+targets::tar_load(isometric_model_pp_check_row)
+
+isometric_model_pp_check_row
+
+```
