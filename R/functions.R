@@ -268,6 +268,51 @@ plot_isometric_loamr <- function(isometric_data, isometric_loamr_summary) {
     
 }
 
+get_isometric_icc <- function(isometric_model) {
+  
+  resp <- isometric_model$formula$responses
+  
+  var_ratios <- tibble(
+    resp = as.character(),
+    bw_w = as.character(),
+    mean = as.numeric(),
+    lower_qi = as.numeric(), 
+    upper_qi = as.numeric()
+  )
+  
+  set.seed(1988)
+  
+  for(i in resp) {
+    
+    var_icc_bw <- performance::variance_decomposition(isometric_model, resp = i, re_formula = ~ (1|participant))
+    var_icc_w <- performance::variance_decomposition(isometric_model, resp = i, re_formula = ~ (1|participant) + (1|participant:day))
+    
+    var_icc_bw <- tibble(
+      resp = i,
+      bw_w = "bw",
+      mean = var_icc_bw$ICC_decomposed,
+      lower_qi = var_icc_bw$ICC_CI[1], 
+      upper_qi = var_icc_bw$ICC_CI[2]
+    )
+    
+    var_icc_w <- tibble(
+      resp = i,
+      bw_w = "w",
+      mean = var_icc_w$ICC_decomposed,
+      lower_qi = var_icc_w$ICC_CI[1], 
+      upper_qi = var_icc_w$ICC_CI[2]
+    )
+    
+    var_ratios <- bind_rows(var_ratios,
+                            var_icc_bw, 
+                            var_icc_w)
+    
+  }
+  
+  var_ratios
+  
+}
+
 # Isokinetic models and plots
 fit_isokinetic_model <- function(isokinetic_data) {
   
@@ -410,6 +455,84 @@ plot_isokinetic_BA <- function(isokinetic_bias_loa_summary, isokinetic_data) {
     ) +
     theme_bw() +
     theme(plot.caption = element_text(size=6))
+}
+
+get_isokinetic_icc <- function(data, isokinetic_model) {
+  # prepare data for icc model in long form
+  isokinetic_data <- data |>
+    select(1:15, contains("best")) |>
+    pivot_longer(16:27, 
+                 names_to = "name",
+                 values_to = "value") |>
+    separate(name,
+             into = c("day", "exercise", "x", "y", "z", "a", "con_ecc")) |>
+    select(-x,-y,-z,-a) |>
+    mutate(day = case_when(
+      day == "t1" ~ "d1",
+      day == "t2" ~ "d2"
+    )) |> 
+    mutate_if(is.character,as.factor) |>
+    pivot_wider(names_from = c("exercise", "con_ecc"),
+                values_from = "value",
+                id_cols = c("participant", "day")) 
+  
+  cp_con_bf <- bf(cp_con ~ 1 + (1|a|participant))
+  
+  lp_con_bf <- bf(lp_con ~ 1 + (1|a|participant))
+  
+  row_con_bf <- bf(row_con ~ 1 + (1|a|participant))
+  
+  cp_ecc_bf <- bf(cp_ecc ~ 1 + (1|a|participant))
+  
+  lp_ecc_bf <- bf(lp_ecc ~ 1 + (1|a|participant))
+  
+  row_ecc_bf <- bf(row_ecc ~ 1 + (1|a|participant))
+  
+  
+  brm_model_isokinetic_icc <- brm(cp_con_bf + lp_con_bf + row_con_bf + 
+                                cp_ecc_bf + lp_ecc_bf + row_ecc_bf + 
+                                set_rescor(rescor = TRUE),
+                              data = isokinetic_data,
+                              chains = 4,
+                              cores = 4,
+                              seed = 1988,
+                              warmup = 2000,
+                              iter = 8000,
+                              control = list(adapt_delta = 0.99),
+                              save_pars = save_pars(all = TRUE))
+  
+  var_ratios <- tibble(
+    resp = as.character(),
+    mean = as.numeric(),
+    lower_qi = as.numeric(), 
+    upper_qi = as.numeric()
+  )
+  
+  resp <- brm_model_isokinetic_icc$formula$responses
+  
+  set.seed(1988)
+  
+  for(i in resp) {
+    PPD <- brms::posterior_predict(brm_model_isokinetic_icc, resp = i, re_formula = NULL)
+    var_total <- apply(PPD, MARGIN = 1, FUN = stats::var)
+    
+    PPD_0 <- brms::posterior_predict(brm_model_isokinetic_icc, resp = i, re_formula = NA)
+    var_rand_intercept <- apply(PPD_0, MARGIN = 1, FUN = stats::var)
+    
+    var_icc <- var_rand_intercept/var_total
+    
+    m_qi <- mean_qi(1-var_icc)
+    
+    var_ratios <- bind_rows(var_ratios,
+                            tibble(
+                              resp = i,
+                              mean = m_qi$y,
+                              lower_qi = m_qi$ymin, 
+                              upper_qi = m_qi$ymax
+                            ))
+  }
+  
+  var_ratios
 }
 
 # Model checks

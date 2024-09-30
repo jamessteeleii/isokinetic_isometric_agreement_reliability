@@ -86,6 +86,7 @@ list(
                plot_annotation(caption = "Note, the solid horizontal lines (point estimates) with pale blue ribbons (95% quantile intervals) show the between day limits of agreement,\nthe dotted horizontal lines (point estimates) with pale orange ribbons (95% quantile intervals) show the within day limits of agreement") &
                theme(plot.caption = element_text(size=6))),
   tar_target(isometric_plot_tiff, make_plot_tiff(combined_isometric_plot, 10, 6.66, "plots/isometric_plot.tiff")),
+  tar_target(isometric_icc, get_isometric_icc(isometric_model)),
   
   # Fit and plot isokinetic model
   tar_target(isokinetic_model, fit_isokinetic_model(isokinetic_data)),
@@ -101,6 +102,8 @@ list(
   tar_target(isokinetic_bias_loa_summary, get_isokinetic_bias_loa_summary(isokinetic_draws, isokinetic_data)),
   tar_target(isokinetic_BA_plot, plot_isokinetic_BA(isokinetic_bias_loa_summary, isokinetic_data)),
   tar_target(isokinetic_BA_plot_tiff, make_plot_tiff(isokinetic_BA_plot, 10, 6.66, "plots/isokinetic_BA_plot.tiff")),
+  tar_target(isokinetic_icc, get_isokinetic_icc(data, isokinetic_model)),
+  
   
   # Reporting
   tar_target(grateful_report, cite_packages(out.dir = ".", cite.tidyverse = TRUE, out.format = "pdf"))
