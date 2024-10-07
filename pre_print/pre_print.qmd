@@ -29,7 +29,7 @@ license-type: ccby # change if neccessary
 # year: 2025 # defaults to current year
 keywords: [force, chest press, leg press, seated row] # optional
 # optional link to Supplementary Material:
-suppl-link: https://osf.io/ 
+suppl-link: https://osf.io/zrxjp/
 reference-section-title: References
 printnote: "PREPRINT - NOT PEER REVIEWED" # if post print, include "POSTPRINT" then link to the published article
 bibliography: bibliography.bib  
