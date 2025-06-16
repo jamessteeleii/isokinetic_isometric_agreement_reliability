@@ -3,6 +3,7 @@
 # Preparing data
 prepare_isometric_data <- function(data) {
   isometric_data <- data |>
+  mutate(across(c(16:81), ~ . * 1.356)) |>
   select(1:15, contains("max")) |>
   pivot_longer(16:33, 
                names_to = "name",
@@ -22,7 +23,8 @@ prepare_isometric_data <- function(data) {
 
 prepare_isokinetic_data <- function(data) {
   isokinetic_data <- data |>
-  select(1:15, contains("best")) |>
+    mutate(across(c(16:81), ~ . * 1.356)) |>
+    select(1:15, contains("best")) |>
   pivot_longer(16:27, 
                names_to = "name",
                values_to = "value") |>
@@ -244,19 +246,19 @@ plot_isometric_loamr <- function(isometric_data, isometric_loamr_summary) {
     
     geom_text(data = isometric_loamr_summary |> filter(bw_w == "w") |> group_by(exercise) |> 
                 mutate(x = (max(mean_i) - min(mean_i))/2) |> slice_min(mean_i, n=1) |> slice_head(n=1),
-              aes(x=mean_i + x, y=-75, group=exercise, 
+              aes(x=mean_i + x, y=-95, group=exercise, 
                   label=glue::glue("Within-day: +/- {round(mean,2)} [95% QI: {round(.lower,2)},{round(.upper,2)}]")),
               size = 2.5) +
     geom_text(data = isometric_loamr_summary |> filter(bw_w == "bw") |> group_by(exercise) |> 
                 mutate(x = (max(mean_i) - min(mean_i))/2) |> slice_min(mean_i, n=1) |> slice_head(n=1),
-              aes(x=mean_i + x, y=-85, group=exercise, 
+              aes(x=mean_i + x, y=-105, group=exercise, 
                   label=glue::glue("Between-day: +/- {round(mean,2)} [95% QI: {round(.lower,2)},{round(.upper,2)}]")),
               size = 2.5) +
     
     geom_point(aes(x=mean_i, y=mean_diff), size = 2, color = "black", fill = NA, shape = 21, alpha = 0.75) +
     geom_point(aes(x=mean_i, y=mean_diff, color=day), alpha = 0.75) +
     scale_color_viridis_d() +
-    scale_y_continuous(breaks = seq(-100, 100, by=25)) +
+    scale_y_continuous(breaks = seq(-150, 150, by=25)) +
     ggh4x::facet_grid2(.~exercise, scales = "free", independent = "x") +
     labs(
       title = "Limits of Agreement with the Mean",
@@ -444,7 +446,7 @@ plot_isokinetic_BA <- function(isokinetic_bias_loa_summary, isokinetic_data) {
               aes(x=mean + x, y=y, group=exercise, 
                   label=glue::glue("Mean bias: {round(bias,2)} [95% QI: {round(bias.lower,2)},{round(bias.upper,2)}]\nLimits of Agreement: +/- {round(loa,2)} [95% QI: {round(loa.lower,2)},{round(loa.upper,2)}]")),
               size = 2.5, vjust=-0.05) +
-    scale_y_continuous(breaks = seq(-200, 200, by=25)) +
+    scale_y_continuous(breaks = seq(-250, 250, by=25)) +
     ggh4x::facet_grid2(con_ecc~exercise, scales = "free", independent = "all") +
     
     labs(

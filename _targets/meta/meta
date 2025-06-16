@@ -1,55 +1,55 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
 .Random.seed|object|a3aa1093f942b567|||||||||||||||
-combined_isometric_plot|stem|fe37d84e3b4eb7b5|6e792700e56a9861|743fc172782b5634|2044976524||t19988.6962787012s|854547f2f6314466|8324976|rds|local|vector|||0||
-data|stem|2ff46fa6d63ad378|bf6275f653d53dd4|b9952bd51cccea52|33550471||t19984.5934224582s|d1ec28f89e6eaddb|3785|rds|local|vector|||0.72||
-file|stem|c20bcd8480d8f847|ee6cebdffc9a61e4|2c530c1562a7fbd1|1735323524|C:/Users/james/Dropbox/Research/Exercise Coach/isokinetic_isometric_agreement_reliability/data/data.csv|t19979.6883428076s|16d04af8c751579f|5748|file|local|vector|||6.05||
-fit_isokinetic_model|function|bdd8f24a5645398d|||||||||||||||
-fit_isometric_model|function|e6c5f636330e3e51|||||||||||||||
-get_isokinetic_bias_loa_summary|function|30cfaf3009d66fa5|||||||||||||||
-get_isokinetic_draws|function|59d4d0aab1f9a751|||||||||||||||
-get_isokinetic_icc|function|000d8865bb6f4507|||||||||||||||
-get_isometric_bias_summary|function|448ae1041338c544|||||||||||||||
-get_isometric_draws|function|6b2c40a58310119c|||||||||||||||
-get_isometric_icc|function|1883729a80888fae|||||||||||||||
-get_isometric_loamr_summary|function|650fdcb8a2a42816|||||||||||||||
-grateful_report|stem|53350dbec40867ce|33e4d47b6dd00477|2c530c1562a7fbd1|1345217321||t19988.6191046949s|4be831169559909a|74|rds|local|vector|||8.07||
-isokinetic_BA_plot|stem|dd3e65b45c3c8b5d|a3546c5923c0dd95|30e0efdeeaf41da3|-1791420041||t19985.5773333179s|1791d25a902f08a6|307086|rds|local|vector|||0.09||
-isokinetic_BA_plot_tiff|stem|6aa32096245e8e61|a52262970327e1ba|aa1858e23f51af74|1769950410||t19985.5773547073s|87bbe5f41aaaedf6|80|rds|local|vector|||0.64||
-isokinetic_bias_loa_summary|stem|54affe3af36a5fe3|df0fde97ca8efa24|3485a42cf1cfd86e|1513574960||t19985.5688910245s|c8eb026e18a8d85b|986|rds|local|vector|||0.06||
-isokinetic_data|stem|033162e5ff7c29fb|050477b453f1eede|a4edd0e4e36f4af8|-752093902||t19985.5677586727s|730bcf63838b3e9c|1106|rds|local|vector|||0.08||
-isokinetic_draws|stem|7177e57550833527|b5e8fc39fed93132|8c6c0ee4cb063e99|616644068||t19985.5688900582s|70641bef19b557e1|3587844|rds|local|vector|||1.2||
-isokinetic_icc|stem|d86cac657da8e6f2|fde31607379e3069|e27c2c17815aed8a|1669621371||t19996.6655094504s|f042d07b06dcc05e|347|rds|local|vector|||297.65|There were 45 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. Seehttpsmcstan.orgmiscwarnings.htmlmaximumtreedepthexceeded. Examine the pairs plot to diagnose sampling problems|
-isokinetic_model|stem|f515df801aa4487f|d23dac4ccfd38101|c606936a644b6de0|1582009063||t19985.5688734253s|e3b68f10b727221f|29362039|rds|local|vector|||94.79||
-isokinetic_model_pp_check_cp_con|stem|004bb99f76af39ec|e59529b3e2c81cd0|26f5abfef3a62260|338773148||t19989.3642707312s|a3e94873e7937fc7|129583|rds|local|vector|||1.03||
-isokinetic_model_pp_check_cp_ecc|stem|015f38ee70cb2316|95042445cc788a5f|26f5abfef3a62260|486036048||t19989.3642454407s|e58dfb258cf01ffc|129562|rds|local|vector|||1.12||
-isokinetic_model_pp_check_lp_con|stem|a8f653e57c98a877|57f9e3b79f0f1908|26f5abfef3a62260|745664561||t19989.3642318305s|8632b5590820c0cc|129589|rds|local|vector|||1.03||
-isokinetic_model_pp_check_lp_ecc|stem|8736ace555edcd25|8d8a48fa1506ebbc|26f5abfef3a62260|1871621147||t19989.3640238517s|007416d6195b7c6d|125102|rds|local|vector|||1.05||
-isokinetic_model_pp_check_row_con|stem|8301c45c7d2ec1fe|d03cdaf9f6ca9daf|26f5abfef3a62260|-1831432516||t19989.3640110645s|007416d6195b7c6d|125102|rds|local|vector|||1.44||
-isokinetic_model_pp_check_row_ecc|stem|9100e9d0a59d3d5f|c3cbfa06e689327e|26f5abfef3a62260|781606261||t19989.3642582268s|75a1b973b7f838f3|129561|rds|local|vector|||1.05||
-isokinetic_model_rhat|stem|7b0a6688b3f2c4f6|c2e103d03f8bff12|d21e88d2f73b8aad|-1894253806||t19989.3640555418s|a18b33723582f08c|29618138|rds|local|vector|||1.23|Dropped 16 NAs from new_rhatrhat.|
-isokinetic_model_trace|stem|060ad9c6b5136194|633b73faef778206|a9303e0d0c22c8c2|1187607464||t19989.3642188735s|07bd3a8d4d812e4a|83681249|rds|local|vector|||8.28||
-isometric_bias_plot|stem|aa3e33d404a1cb3e|161f9caaa8152f08|d212872f0c8b4aec|619079591||t19988.6962706919s|5bedb0f435ff47a9|8104981|rds|local|vector|||1.79||
-isometric_bias_summary|stem|8d51a8b5374c64c9|70b10c2c2950f838|ee71806cc5c15e55|915718745||t19988.6962393181s|6d5a274eade38264|421|rds|local|vector|||1.5||
-isometric_data|stem|ed62e575a095b21f|bebe69adaf0b6da9|5d376f7fef536e68|1348213187||t19984.5944283077s|1931b44881fa2863|3630|rds|local|vector|||0.06||
-isometric_draws|stem|4a363ed23d778b64|e75eb339839d57f7|72dfd43fc7074645|-1456788329||t19988.6962202543s|a80d9f5dc228e33c|3306355|rds|local|vector|||0.89||
-isometric_icc|stem|80ecd551dd5b12f0|7527c6d287f71117|997df78ed41de4be|-846212777||t19996.6735192253s|ce4c073d887b696f|381|rds|local|vector|||24.22||
-isometric_loamr_plot|stem|0bc0c03fc40a0149|f4b63a9a62d83da7|88b1067cefbf5761|-107861230||t19988.6962427772s|251f8063627fac9e|352151|rds|local|vector|||0.17||
-isometric_loamr_summary|stem|fb171ad2358de553|5d77712d8f594d9f|3ba6076c37f18a8f|1199122691||t19988.6962216907s|fe946fd0b87ee8a2|987|rds|local|vector|||0.11|Detected an unexpected manytomany relationship between x and y.ℹ Row 1 of x matches multiple rows in y.ℹ Row 1 of y matches multiple rows in x.ℹ If a manytomany relationship is expected, set relationship   manytomany to silence this warning.|
-isometric_model|stem|03d9658268216705|ec65a99abf8923c4|816d79797cd53d6c|1609790368||t19988.6962069069s|0c3d4e895c9a2bf0|189990989|rds|local|vector|||347.89|There were 4 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. Seehttpsmcstan.orgmiscwarnings.htmlmaximumtreedepthexceeded. Examine the pairs plot to diagnose sampling problems|
 isometric_model_diagnostics|stem||5dbe473a1f7e6c98|99d4ccace5a5e573|84879657||t19989.4177672866s||0|file|local|vector|||23.36||Error running quarto cli.ℹ Rerun with quiet  FALSE to see the full error message.Caused by error System command quarto.exe failed
 isometric_model_pp_check|stem||e5240c4e2ba1a68c|0b9c0956a8b6f0f3|-1819716569||t19989.3589716005s||0|rds|local|vector|||0.18||Argument resp must be a single variable name when applying this method to a multivariate model.
-isometric_model_pp_check_cp|stem|4448c7aabb5336ec|e703943c11bbf494|836bd75ad436d253|549823534||t19989.3623642758s|b9a8378910de635b|147298|rds|local|vector|||1.55||
-isometric_model_pp_check_lp|stem|ad1830827b760869|cd846b29968127f2|836bd75ad436d253|1159262212||t19989.3623457746s|b3046d2d0a44cc76|147459|rds|local|vector|||2.13||
-isometric_model_pp_check_row|stem|7412cb80484752bb|39ef1b9d0d996be8|836bd75ad436d253|1700584163||t19989.3630803147s|a8b7424b75b24a66|147222|rds|local|vector|||1.46||
-isometric_model_rhat|stem|9e90116a40b1c0f1|424a0a33dbe1f7d0|8ed2c661cf6b5d3a|-1205450417||t19989.3630620097s|17a9b1a00b417b18|190268888|rds|local|vector|||6.47|Dropped 12 NAs from new_rhatrhat.|
-isometric_model_trace|stem|ffd0d1fd29a2daa0|28a35ddca269ffe6|c0865d9a1a7d23f7|427857737||t19989.3632383133s|64790b192cd05204|83223115|rds|local|vector|||8.02||
-isometric_plot_tiff|stem|75a79a1489788b8a|594817e6a36a60b0|00aa0892a4b3bdca|-779365480||t19988.6962984379s|e12065d620e41fd5|76|rds|local|vector|||1.68||
-make_plot_tiff|function|d824f2b8d85c6ffb|||||||||||||||
-make_pp_check|function|3135c69fe0ce78c8|||||||||||||||
-make_rhat_plot|function|ff9978352d799ec0|||||||||||||||
-make_trace_plot|function|accba148807567de|||||||||||||||
-plot_isokinetic_BA|function|ec720c35ea11bcd5|||||||||||||||
-plot_isometric_bias|function|87e0102199adb7c1|||||||||||||||
-plot_isometric_loamr|function|e725b607945411b6|||||||||||||||
-prepare_isokinetic_data|function|b2d605f05266a406|||||||||||||||
-prepare_isometric_data|function|84dd871287950d74|||||||||||||||
+grateful_report|stem|53350dbec40867ce|33e4d47b6dd00477|2c530c1562a7fbd1|1345217321||t19988.6191046949s|s74b|74|rds|local|vector|||8.07||
+file|stem|c20bcd8480d8f847|ee6cebdffc9a61e4|2c530c1562a7fbd1|1735323524|C:/Users/james/Dropbox/Research/Exercise Coach/isokinetic_isometric_agreement_reliability/data/data.csv|t19979.6883428076s|s5748b|5748|file|local|vector|||6.05||
+data|stem|2ff46fa6d63ad378|bf6275f653d53dd4|b9952bd51cccea52|33550471||t19984.5934224582s|s3785b|3785|rds|local|vector|||0.72||
+isometric_data|stem|3152c7ee8f3a975f|bebe69adaf0b6da9|1ea29169bc6a4398|1348213187||t20255.3972869143s|s4477b|4477|rds|local|vector|||0.04||
+isokinetic_data|stem|53ca0a93b1f0c451|050477b453f1eede|6927de90119d32ba|-752093902||t20255.39728814s|s1822b|1822|rds|local|vector|||0.06||
+isometric_model|stem|153ddab69319ca05|ec65a99abf8923c4|aec6ec4493f23d7d|1609790368||t20255.4020405926s|s189849587b|189849587|rds|local|vector|||403.72|There were 2 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded. Examine the pairs() plot to diagnose sampling problems|
+isokinetic_model|stem|220c45270b3db934|d23dac4ccfd38101|f477e59c5f8dc3d0|1582009063||t20255.4030513872s|s29387702b|29387702|rds|local|vector|||85.73||
+isometric_draws|stem|fbb9a5b22d13cd27|e75eb339839d57f7|f6e90b9378a9bc50|-1456788329||t20255.4030784025s|s3305426b|3305426|rds|local|vector|||1.14||
+isometric_model_pp_check_lp|stem|ceb2cf7831dc835e|cd846b29968127f2|9e8a3e1e8bf9410f|1159262212||t20255.4031114867s|s148653b|148653|rds|local|vector|||1.72||
+isometric_model_pp_check_cp|stem|998fedbf42354ec1|e703943c11bbf494|9e8a3e1e8bf9410f|549823534||t20255.4031436342s|s148461b|148461|rds|local|vector|||1.67||
+isometric_model_rhat|stem|a67c41849c835659|424a0a33dbe1f7d0|2f26bb58ad1f2d58|-1205450417||t20255.4033055788s|s190140762b|190140762|rds|local|vector|||6|Dropped 12 NAs from 'new_rhat(rhat)'.|
+isometric_icc|stem|c413172c37f163c0|7527c6d287f71117|43fad0627a1c68c0|-846212777||t20255.4035737021s|s381b|381|rds|local|vector|||22.06||
+isometric_model_trace|stem|a4d5b06edfe981d1|28a35ddca269ffe6|d7849fc32424ac95|427857737||t20255.4037392787s|s83155296b|83155296|rds|local|vector|||7.55||
+isometric_model_pp_check_row|stem|a0d33b210ef722c1|39ef1b9d0d996be8|9e8a3e1e8bf9410f|1700584163||t20255.4037718787s|s152644b|152644|rds|local|vector|||1.7||
+isokinetic_model_trace|stem|cd3c6c7410823bf3|633b73faef778206|9d32c5f1ee0822b9|1187607464||t20255.4039253207s|s83661774b|83661774|rds|local|vector|||7.22||
+isokinetic_model_pp_check_row_con|stem|f4a5bbd482c2e1d2|d03cdaf9f6ca9daf|0f1e3a9a6db682d7|-1831432516||t20255.4039478056s|s129576b|129576|rds|local|vector|||1.5||
+isokinetic_model_pp_check_cp_ecc|stem|c1f717bac81edc25|95042445cc788a5f|0f1e3a9a6db682d7|486036048||t20255.403964834s|s129590b|129590|rds|local|vector|||1.09||
+isokinetic_model_pp_check_lp_ecc|stem|1336c790f7f9e2fe|8d8a48fa1506ebbc|0f1e3a9a6db682d7|1871621147||t20255.4039821463s|s129629b|129629|rds|local|vector|||1.09||
+isokinetic_draws|stem|baefe7b126d7b957|b5e8fc39fed93132|89492da46c8d3b44|616644068||t20255.4039970649s|s3587582b|3587582|rds|local|vector|||0.71||
+isokinetic_model_pp_check_lp_con|stem|b7d72841c646ded6|57f9e3b79f0f1908|0f1e3a9a6db682d7|745664561||t20255.4040151821s|s129604b|129604|rds|local|vector|||1.17||
+isokinetic_model_pp_check_cp_con|stem|d39e924993f263d1|e59529b3e2c81cd0|0f1e3a9a6db682d7|338773148||t20255.4040318701s|s129570b|129570|rds|local|vector|||1.06||
+isokinetic_icc|stem|b8e4a0415676bb1b|fde31607379e3069|cd8ec56a3fdfc51a|1669621371||t20255.4079324092s|s347b|347|rds|local|vector|||336.67|There were 45 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded. Examine the pairs() plot to diagnose sampling problems|
+isokinetic_model_pp_check_row_ecc|stem|07631ac52d91063e|c3cbfa06e689327e|0f1e3a9a6db682d7|781606261||t20255.4079488385s|s129563b|129563|rds|local|vector|||1.06||
+isokinetic_model_rhat|stem|e0ee14f3c423be5b|c2e103d03f8bff12|af0bc55a03ef506e|-1894253806||t20255.4079820055s|s29663118b|29663118|rds|local|vector|||0.98|Dropped 16 NAs from 'new_rhat(rhat)'.|
+isometric_loamr_summary|stem|304425ae15782ec9|5d77712d8f594d9f|cf411e0cac23f617|1199122691||t20255.4079836987s|s1133b|1133|rds|local|vector|||0.08|Detected an unexpected many-to-many relationship between `x` and `y`. ℹ Row 1 of `x` matches multiple rows in `y`. ℹ Row 1 of `y` matches multiple rows in `x`. ℹ If a many-to-many relationship is expected, set `relationship =   'many-to-many'` to silence this warning.|
+isometric_bias_summary|stem|ae98dbc8e7df28a9|70b10c2c2950f838|642dd682683432a5|915718745||t20255.4080078758s|s425b|425|rds|local|vector|||2.05||
+isokinetic_bias_loa_summary|stem|a568023941b0dda0|df0fde97ca8efa24|ea2776674eab26eb|1513574960||t20255.4080097037s|s1310b|1310|rds|local|vector|||0.07||
+isometric_bias_plot|stem|5f35f7b0c5531a55|161f9caaa8152f08|c2a9f0d260d78910|619079591||t20255.4080390583s|s8113770b|8113770|rds|local|vector|||1.6||
+isokinetic_BA_plot|stem|41f980d2bb5ec375|a3546c5923c0dd95|d7012f83db9a592f|-1791420041||t20255.4101318727s|s329340b|329340|rds|local|vector|||0.09||
+isokinetic_BA_plot_tiff|stem|be07c2aa0ec8c7b2|a52262970327e1ba|f43c667a3e6e33a5|1769950410||t20255.4101553655s|s80b|80|rds|local|vector|||0.81||
+get_isometric_icc|function|1883729a80888fae
+get_isokinetic_bias_loa_summary|function|30cfaf3009d66fa5
+fit_isometric_model|function|e6c5f636330e3e51
+make_trace_plot|function|accba148807567de
+get_isometric_draws|function|6b2c40a58310119c
+plot_isometric_loamr|function|9974ef4bbe7defb5
+fit_isokinetic_model|function|bdd8f24a5645398d
+make_pp_check|function|3135c69fe0ce78c8
+make_rhat_plot|function|ff9978352d799ec0
+get_isometric_bias_summary|function|448ae1041338c544
+make_plot_tiff|function|d824f2b8d85c6ffb
+get_isokinetic_icc|function|000d8865bb6f4507
+prepare_isometric_data|function|410eaa525e35eaea
+get_isokinetic_draws|function|59d4d0aab1f9a751
+plot_isometric_bias|function|87e0102199adb7c1
+plot_isokinetic_BA|function|7a8bc2a83715c76a
+prepare_isokinetic_data|function|03838df110accb0b
+get_isometric_loamr_summary|function|650fdcb8a2a42816
+isometric_loamr_plot|stem|4725f64590d0066e|f4b63a9a62d83da7|fbcf721dbec93635|-107861230||t20255.4174990896s|s375107b|375107|rds|local|vector|||0.17||
+combined_isometric_plot|stem|3d7fd59283aaca0c|6e792700e56a9861|45b952078079859a|2044976524||t20255.4175118922s|s8490877b|8490877|rds|local|vector|||0.02||
+isometric_plot_tiff|stem|b39d4ea9ad3eaa2e|594817e6a36a60b0|1efca12db36c8d56|-779365480||t20255.4175393023s|s76b|76|rds|local|vector|||1.71||
