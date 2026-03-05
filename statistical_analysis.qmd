@@ -177,6 +177,8 @@ $$
 \end{aligned}
 $$ {#eq-isometric-prior}
 
+Given the use of informative priors based on existing knowledge, we also refit this model utilising the default `brms` priors to verify that inferences were essentally insensitive to prior selection (see: <https://osf.io/tnkqy>).
+
 The between- and within-day 95% limits of agreement with the mean where calculated from the posterior draws of the relevant variance components. These were calculated adapting the approach of Christensen et al. [-@christensenJonesAlsMethod2020] adjusting for the degrees of freedom based upon the number of days, and number of replicates within days. The between-day limits of agreement with the mean were calculated using the between day variance component for each exercise outcome, $\sigma_{\alpha_{1ij}}$, as:
 
 $$
