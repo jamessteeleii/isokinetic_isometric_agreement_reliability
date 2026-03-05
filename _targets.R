@@ -104,6 +104,18 @@ list(
   tar_target(isokinetic_BA_plot_tiff, make_plot_tiff(isokinetic_BA_plot, 10, 6.66, "plots/isokinetic_BA_plot.tiff")),
   tar_target(isokinetic_icc, get_isokinetic_icc(data, isokinetic_model)),
   
+  # Refit isometric model with default priors to check sensitivity
+  tar_target(isometric_model_default, fit_isometric_model_default(isometric_data)),
+  tar_target(isometric_draws_default, get_isometric_draws(isometric_model_default, isometric_data)),
+  tar_target(isometric_bias_summary_default, get_isometric_bias_summary(isometric_draws_default)),
+  tar_target(isometric_loamr_summary_default, get_isometric_loamr_summary(isometric_data,isometric_draws_default)),
+  tar_target(isometric_bias_plot_default, plot_isometric_bias(isometric_draws_default, isometric_bias_summary_default)),
+  tar_target(isometric_loamr_plot_default, plot_isometric_loamr(isometric_data, isometric_loamr_summary_default)),
+  tar_target(combined_isometric_plot_default, (isometric_bias_plot_default / isometric_loamr_plot_default) +
+               plot_annotation(caption = "Note, the solid horizontal lines (point estimates) with pale blue ribbons (95% quantile intervals) show the between day limits of agreement,\nthe dotted horizontal lines (point estimates) with pale orange ribbons (95% quantile intervals) show the within day limits of agreement") &
+               theme(plot.caption = element_text(size=6))),
+  tar_target(isometric_plot_tiff_default, make_plot_tiff(combined_isometric_plot_default, 10, 6.66, "plots/isometric_plot_default.tiff")),
+  tar_target(isometric_icc_default, get_isometric_icc(isometric_model_default)),
   
   # Reporting
   tar_target(grateful_report, cite_packages(out.dir = ".", cite.tidyverse = TRUE, out.format = "pdf"))

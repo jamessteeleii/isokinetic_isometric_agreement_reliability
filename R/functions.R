@@ -558,3 +558,34 @@ make_trace_plot <- function(model) {
 make_pp_check <- function(model, resp) {
   pp_check(model, resp = resp)
 }
+
+# Refit isometric models with default priors to check sensitivity
+fit_isometric_model_default <- function(isometric_data) {
+  isometric_data_wide <- isometric_data |>
+    select(participant, exercise, day, trial, value) |>
+    pivot_wider(names_from = "exercise",
+                values_from = "value",
+                id_cols = c("participant", "day", "trial"))
+  
+  isometric_cp_bf <- bf(cp ~ 1 + day + (1|a|participant) + (1|b|participant:day))
+  isometric_lp_bf <- bf(lp ~ 1 + day + (1|a|participant) + (1|b|participant:day))
+  isometric_row_bf <- bf(row ~ 1 + day + (1|a|participant) + (1|b|participant:day))
+  
+  mean_cp <- mean(isometric_data_wide$cp)
+  mean_lp <- mean(isometric_data_wide$lp)
+  mean_row <- mean(isometric_data_wide$row)
+  
+  var_cp <- var(isometric_data_wide$cp)
+  var_lp <- var(isometric_data_wide$lp)
+  var_row <- var(isometric_data_wide$row)
+  
+  brm_model_isometric <- brm(isometric_cp_bf + isometric_lp_bf + isometric_row_bf + set_rescor(TRUE),
+                             data = isometric_data_wide,
+                             chains = 4,
+                             cores = 4,
+                             seed = 1988,
+                             warmup = 2000,
+                             iter = 8000,
+                             control = list(adapt_delta = 0.99),
+                             save_pars = save_pars(all = TRUE))
+}

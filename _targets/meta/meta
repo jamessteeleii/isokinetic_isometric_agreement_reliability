@@ -33,6 +33,14 @@ isometric_loamr_plot|stem|1789324951d8ee21|f4b63a9a62d83da7|fadcd71e67c6e1ec|-10
 isometric_bias_plot|stem|b53e93221222183c|161f9caaa8152f08|85a8ee2334f381df|619079591||t20517.4041389398s|s8114127b|8114127|rds|local|vector|||1.97||
 combined_isometric_plot|stem|b14cc10f237aa9a4|6e792700e56a9861|0cfe19b8f3116436|2044976524||t20517.4041564278s|s8491368b|8491368|rds|local|vector|||0.02||
 isometric_plot_tiff|stem|b39d4ea9ad3eaa2e|594817e6a36a60b0|f976ac50b77cfaca|-779365480||t20517.4041864575s|s76b|76|rds|local|vector|||1.51||
+isokinetic_BA_plot|stem|0070806e43abd510|a3546c5923c0dd95|2e4b377c001888b1|-1791420041||t20517.4048711973s|s329787b|329787|rds|local|vector|||0.12||
+isokinetic_BA_plot_tiff|stem|be07c2aa0ec8c7b2|a52262970327e1ba|599a8697e2edfd7d|1769950410||t20517.4048795855s|s80b|80|rds|local|vector|||0.65||
+isometric_model_default|stem|fec97040ff4e43f0|202ce7a46ce47f1c|9e07794df7d6010d|950730256||t20517.5475216065s|s189852594b|189852594|rds|local|vector|||404.69|There were 3 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded. Examine the pairs() plot to diagnose sampling problems|
+isometric_draws_default|stem|e56d7f6f9d003a05|0823bbeed830d73d|312bbba16b3ea031|-574855377||t20517.5475499828s|s3305578b|3305578|rds|local|vector|||0.89||
+isometric_icc_default|stem|f464a670298a7435|7eaa51a2e8e499a8|4a1d600f35c06189|1886608338||t20517.5478180208s|s380b|380|rds|local|vector|||21.8||
+isometric_bias_summary_default|stem|ccb8cf24d3f95570|b382126905e811b0|6ab3ae6e13564027|613858728||t20517.5478365808s|s423b|423|rds|local|vector|||1.56||
+isometric_loamr_summary_default|stem|976060a37a6e632d|7837f4b4b7b0cea8|8547d61ded181709|1460384270||t20517.5478383622s|s1134b|1134|rds|local|vector|||0.09|Detected an unexpected many-to-many relationship between `x` and `y`. ℹ Row 1 of `x` matches multiple rows in `y`. ℹ Row 1 of `y` matches multiple rows in `x`. ℹ If a many-to-many relationship is expected, set `relationship =   'many-to-many'` to silence this warning.|
+isometric_bias_plot_default|stem|33ee8a7b83498fcd|6dce064d21b718c6|5e90c826311faca4|-1125879886||t20517.547866392s|s8118602b|8118602|rds|local|vector|||1.81||
 get_isometric_icc|function|1883729a80888fae
 get_isokinetic_bias_loa_summary|function|30cfaf3009d66fa5
 fit_isometric_model|function|e6c5f636330e3e51
@@ -47,9 +55,11 @@ make_plot_tiff|function|d824f2b8d85c6ffb
 get_isokinetic_icc|function|000d8865bb6f4507
 prepare_isometric_data|function|410eaa525e35eaea
 get_isokinetic_draws|function|59d4d0aab1f9a751
+fit_isometric_model_default|function|e6aaa164795c2f96
 plot_isometric_bias|function|10eb69aa0a799c66
 plot_isokinetic_BA|function|6ed976907976e551
 prepare_isokinetic_data|function|03838df110accb0b
 get_isometric_loamr_summary|function|650fdcb8a2a42816
-isokinetic_BA_plot|stem|0070806e43abd510|a3546c5923c0dd95|2e4b377c001888b1|-1791420041||t20517.4048711973s|s329787b|329787|rds|local|vector|||0.12||
-isokinetic_BA_plot_tiff|stem|be07c2aa0ec8c7b2|a52262970327e1ba|599a8697e2edfd7d|1769950410||t20517.4048795855s|s80b|80|rds|local|vector|||0.65||
+isometric_loamr_plot_default|stem|faf51ab6388b7b44|1d78aaaa39af9d01|b50c51aa67d43da1|572238022||t20517.5488715576s|s379111b|379111|rds|local|vector|||0.18||
+combined_isometric_plot_default|stem|d441d9803ac4b1e7|d58ead53b9dea8d9|918a9d91fe0fb964|55288735||t20517.548884316s|s8497849b|8497849|rds|local|vector|||0||
+isometric_plot_tiff_default|stem|96e2649dae2d79be|e2c856eeafe636f0|64385aa1093e334f|2054252476||t20517.548930666s|s84b|84|rds|local|vector|||3.38||
