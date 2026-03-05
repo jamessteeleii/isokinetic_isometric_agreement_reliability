@@ -204,7 +204,7 @@ plot_isometric_bias <- function(isometric_draws, isometric_bias_summary) {
     labs(
       title = "Between-day mean bias",
       x = "Contrast Coefficients for Day (Helmert Coding)",
-      y = expression(beta[j]-beta[j-1]),
+      y = expression(paste(beta[j]-beta[j-1], " (newtons)")),
       color = "Day"
     ) +
     theme_bw()
@@ -262,8 +262,8 @@ plot_isometric_loamr <- function(isometric_data, isometric_loamr_summary) {
     ggh4x::facet_grid2(.~exercise, scales = "free", independent = "x") +
     labs(
       title = "Limits of Agreement with the Mean",
-      x = expression(bar(y)[i..]),
-      y = expression(y[ijk]-bar(y)[i..]),
+      x = expression(paste(bar(y)[i..], " (newtons)")),
+      y = expression(paste(y[ijk]-bar(y)[i..], " (newtons)")),
       color = "Day"
     ) +
     theme_bw()
@@ -452,8 +452,8 @@ plot_isokinetic_BA <- function(isokinetic_bias_loa_summary, isokinetic_data) {
     labs(
       title = "Mean Bias and Limits of Agreement",
       caption = "Note, the upper, middle, and lower solid horizontal lines (point estimate) with grey ribbons (95% quantile intervals) show the between day upper 95% limit of agreement, the mean bias, and lower 95% limit of agreement respectively",
-      x = expression(bar(y)[i.]),
-      y = expression(y[i2]-y[i1])
+      x = expression(paste(bar(y)[i.], " (newtons)")),
+      y = expression(paste(y[i2]-y[i1], " (newtons)"))
     ) +
     theme_bw() +
     theme(plot.caption = element_text(size=6))
